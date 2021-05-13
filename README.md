@@ -1,4 +1,4 @@
-# WallStreetMonies
+# WallStreetWolf
 
 Fun Finacial Stock App by agentAWP
 
