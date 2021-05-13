@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ETF Analysis</title>
+</head>
+<style>
+
+* {
+
+  box-sizing: border-box;
+
+}
+
+.row {
+
+  margin-left:-5px;
+
+  margin-right:-5px;
+
+}
+.column {
+
+  float: left;
+
+  width: 25%;
+
+  padding: 5px;
+
+}
+/* Clearfix (clear floats) */
+
+.row::after {
+
+  content: "";
+
+  clear: both;
+
+  display: table;
+
+}
+table {
+
+  border-collapse: collapse;
+
+  border-spacing: 0;
+
+  width: 50%;
+
+  border: 1px solid #ddd;
+
+}
+th, td {
+
+  text-align: center;
+
+}
+tr:nth-child(even) {
+
+  background-color: #f2f2f2;
+
+}
+
+</style>
+<body>
+  {% extends "template.html" %}
+  {% block content %}
+  <h1>ETF Details</h1>
+
+  <p><b><u>Closing Price and Percent Change</u></b></p>
+  {%for ticker in allETFs%}
+    <li>{{ticker}} closing price is  ${{allETFs[ticker].close}}</li>
+    {% if allETFs[ticker].dailyPercentChange > 0 %}
+      <li>{{ticker}} closed {{allETFs[ticker].dailyPercentChange}}% higher today</li>
+    {% else %}
+      <li>{{ticker}} closed {{allETFs[ticker].dailyPercentChange}}% lower today</li>
+    {% endif %}
+    <p></p>
+    <p></p>
+  {%endfor%}
+
+    <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+  {% for etf in etfTopTenHoldings %}
+    <div style="padding:10px; display:inline-block;">
+    <h3 style="text-align:left">Top 10 Holdings Day Movement in {{etf}}</h3>
+    {% for x in etfTopTenHoldings[etf] %}
+      <p>{{x}}</p>
+      <p>{{etfTopTenHoldings[etf][x].to_html() | safe }}
+      <p></p>
+    {%endfor%}
+    </div>
+  {% endfor %}
+
+
+  {% if etfComparison %}
+    <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+    <h3 style="text-align:left">ETF Performance</h3>
+    <h4 style="text-align:left">Overall Comparison</h4>
+    <p>{{etfComparison["overall"].to_html() | safe }}<p>
+
+    {% for x in etfComparison %}
+      {% if x != "overall" %}
+        <div style="padding:10px; display:inline-block;">
+        <h4 style="text-align:left">{{x}} Returns</h4>
+        <p>{{etfComparison[x].to_html() | safe}}<p>
+        </div>
+      {% endif %}
+    {%endfor%}
+  {% endif %}
+
+  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+  {% for tick in etfHoldingsfiftyTwoWeekChange %}
+    <h3 style="text-align:left">Top 10 Holdings 52 Week Change for {{tick}}</h3>
+    {% for symb in etfHoldingsfiftyTwoWeekChange[tick] %}
+      {% for data in etfHoldingsfiftyTwoWeekChange[tick][symb] %}
+        <li>{{data}}</li>
+      {% endfor %}
+      <hr>
+    {% endfor %}
+    <p></p>
+  {% endfor %}
+
+
+  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+  <div class="row">
+    {% for x in etfHoldings %}
+      <div class="column">
+        <h3 style="text-align:left">ETF Holdings for {{x}}</h3>
+        <table>
+          <tr>
+            <th>Ticker</th>
+            <th>Weight %</th>
+          </tr>
+          {% for m in etfHoldings[x] %}
+          <tr>
+            <td>{{m}}</td>
+            <td>{{etfHoldings[x][m]}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    {%endfor%}
+  </div>
+  {% endblock %}
+</body>
+</html>

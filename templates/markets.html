@@ -1,0 +1,15 @@
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Enter Market Ticker</title>
+   </head>
+   <body>
+      {% extends "template.html" %}
+      {% block content %}
+      <h1>Choose US Market Index</h1>
+      <form action="/marketData/" method = "POST">
+        <p><input type = "submit" name="symbol" value = "S&P500" ></p>
+      </form>
+      {% endblock %}
+   </body>
+</html>

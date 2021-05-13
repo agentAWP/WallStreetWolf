@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Stock Results</title>
+   </head>
+   <body>
+      {% extends "template.html" %}
+      {% block content %}
+      <h1>Stock Results</h1>
+      {%for ticker in allStocks%}
+        <li>{{ticker}} closing price is  ${{allStocks[ticker].close}}</li>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>DCF Analysis</u></b></p>
+      {%for ticker in dcf%}
+        <li>{{ticker}}: {{dcf[ticker]}}</li>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>DCFTool Analysis</u></b></p>
+      {%for ticker in dcfTool%}
+        <li>{{dcfTool[ticker].to_html() | safe  }}</li>
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>Daily Percent Change</b></u></p>
+      {% for ticker in allStocks %}
+        {% if allStocks[ticker].dailyPercentChange > 0 %}
+          <li>{{ticker}} closed {{allStocks[ticker].dailyPercentChange}}% higher today</li>
+        {% else %}
+          <li>{{ticker}} closed {{allStocks[ticker].dailyPercentChange}}% lower today</li>
+        {% endif %}
+      {% endfor %}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>Historical Percent Change</b></u></p>
+      {%for ticker in percentChange%}
+        <li><u><b>{{ticker}}</b></u></li>
+        {%for x in percentChange[ticker] %}
+          <li>{{x}} Day percent change is {{percentChange[ticker][x]}}</li>
+        {%endfor%}
+        <p></p>
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>52 Week High Low Deviation</b></u></p>
+      {%for ticker in fiftyTwoWeekHighLowChange%}
+          <li><u><b>{{ticker}}</b></u></li>
+        {%for x in fiftyTwoWeekHighLowChange[ticker] %}
+          <li>{{x}}</li>
+        {%endfor%}
+        <p></p>
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+      <p><b><u>EMA Indicators</u></b></p>
+      {%for ticker in ema%}
+        <li><u><b>{{ticker}}</b></u></li>
+        {% for x in ema[ticker] %}
+          <li>EMA{{x}} : {{ema[ticker][x]}}</li>
+        {%endfor%}
+        <p></p>
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>SMA Indicators</u></b></p>
+      {%for ticker in smaDeviation%}
+        <li><u><b>{{ticker}}</b></u></li>
+        {% for x in smaDeviation[ticker] %}
+          <li>{{smaDeviation[ticker][x]}}</li>
+        {%endfor%}
+        <p></p>
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+      <p><b><u>ETF Exposure</u></b></p>
+      {% for ticker in stockETF %}
+        <u><b>{{ticker}}</b></u>
+        {% if not stockETF[ticker].empty %}
+          <p> {{ stockETF[ticker].to_html() | safe }}
+          <p></p>
+        {% else %}
+          <p> NONE </p>
+          <p></p>
+        {% endif %}
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+
+      {% endblock %}
+   </body>
+</html>

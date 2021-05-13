@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Fundamental Analysis</title>
+   </head>
+   <body>
+      {% extends "template.html" %}
+      {% block content %}
+      <h1>Enter Ticker</h1>
+      <form action="/fundaResult/" method = "POST">
+        <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p>
+        <p><input type = "submit" value = "Fundazz" ></p>
+      </form>
+      {% endblock %}
+   </body>
+</html>

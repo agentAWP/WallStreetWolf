@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>S&P 500 Sector Holdings</title>
+</head>
+<style>
+
+* {
+
+  box-sizing: border-box;
+
+}
+
+.row {
+
+  margin-left:-5px;
+
+  margin-right:-5px;
+
+}
+.column {
+
+  float: left;
+
+  width: 25%;
+
+  padding: 5px;
+
+}
+/* Clearfix (clear floats) */
+
+.row::after {
+
+  content: "";
+
+  clear: both;
+
+  display: table;
+
+}
+table {
+
+  border-collapse: collapse;
+
+  border-spacing: 0;
+
+  width: 50%;
+
+  border: 1px solid #ddd;
+
+}
+th, td {
+
+  text-align: center;
+
+}
+tr:nth-child(even) {
+
+  background-color: #f2f2f2;
+
+}
+
+</style>
+<body>
+  {% extends "template.html" %}
+  {% block content %}
+  <h1 style="text-align:left">Top 10 HODLings of S&P500 sectors</h1>
+  <p></p>
+  {% for x in allSectorsHoldingsByWeights %}
+    <div class="column">
+      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Sector: {{x}} </h2>
+        {{allSectorsHoldingsByWeights[x].to_html() | safe }}
+    </div>
+  {% endfor %}
+  {% endblock %}
+</body>
+</html>
+<!-- <div style="padding:10px; display:inline-block;"> -->

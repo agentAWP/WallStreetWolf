@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Stock Parent Template</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+   </head>
+   <body>
+      <header>
+         <div class="container">
+            <h1 class="logo">Stock Analysis Website</h1>
+            <strong>
+               <nav>
+                  <ul class="menu">
+                     <li><a href="{{ url_for('home') }}">Home</a></li>
+                     <li><a href="{{ url_for('about') }}">About</a></li>
+                     <li><a href="{{ url_for('stocks') }}">Stocks</a></li>
+                     <li><a href="{{ url_for('fundamentals') }}">Fundamentals</a></li>
+                     <li><a href="{{ url_for('etf') }}">ETFs</a></li>
+                     <li><a href="{{ url_for('markets') }}">Markets</a></li>
+                     <li><a href="{{url_for('sectorTopTenHoldings')}}">Sector Top Holdings</a></li>
+                     <li><a href="{{url_for('companyFinancials')}}">Company Financials Comparison</a></li>
+                  </ul>
+               </nav>
+            </strong>
+         </div>
+      </header>
+      {% block content %}
+      {% endblock %}
+   </body>
+</html>
