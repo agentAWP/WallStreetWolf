@@ -4,7 +4,6 @@ import json
 import yfinance as yf
 import pandas as pd
 from pandas_datareader import data as pdr
-import alpaca_trade_api as tradeapi
 import requests,datetime,re,time
 import numpy as np
 from bs4 import BeautifulSoup as soup
