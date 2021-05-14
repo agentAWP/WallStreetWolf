@@ -2,15 +2,15 @@
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
-      <title>Enter Ticker</title>
+      <title>Company Fiancials</title>
    </head>
    <body>
       {% extends "index.html" %}
       {% block content %}
       <h1>Enter Ticker</h1>
-      <form action="/stockData/" method = "POST">
+      <form action="/companyFinancialsComparisonResult/" method = "POST">
         <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p>
-        <p><input type = "submit" value = "ROCKET" ></p>
+        <p><input type = "submit" value = "Statements" ></p>
       </form>
       {% endblock %}
    </body>

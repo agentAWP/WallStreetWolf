@@ -5,12 +5,12 @@
       <title>Fundamental Analysis</title>
    </head>
    <body>
-      {% extends "template.html" %}
+      {% extends "index.html" %}
       {% block content %}
       <h1>Enter Ticker</h1>
       <form action="/fundaResult/" method = "POST">
         <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p>
-        <p><input type = "submit" value = "Fundazz" ></p>
+        <p><input type = "submit" value = "FUNDAMENTALS" ></p>
       </form>
       {% endblock %}
    </body>

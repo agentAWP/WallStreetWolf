@@ -14,3 +14,5 @@ requests>=2.25.1
 urllib3>=1.26.3
 Werkzeug>=1.0.1
 yfinance>=0.1.55
+Flask-Bootstrap>=3.3.7.1
+flask_nav>=0.6

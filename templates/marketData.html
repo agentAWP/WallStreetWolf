@@ -5,7 +5,7 @@
       <title>Market Macros Results</title>
    </head>
    <body>
-      {% extends "template.html" %}
+      {% extends "index.html" %}
       {% block content %}
       <h1> Sector Weight in S&P500, their Vanguard and SPDR tickers</h1>
         {{sectors.to_html() | safe}}
@@ -14,41 +14,41 @@
         {{marketMovement["sectorPerformance"].to_html() | safe}}
       <p></p>
       <h1>SMA Movement</h1>
-        {% for x in finVizScreener["stocksCrossedAboveSMA"] %}
-          <li>Stocks Crossing above their {{x}} SMA: {{finVizScreener["stocksCrossedAboveSMA"][x]}}</li>
+        {% for x in finVizMarketScreen["stocksCrossedAboveSMA"] %}
+          <li>Stocks Crossing above their {{x}} SMA: {{finVizMarketScreen["stocksCrossedAboveSMA"][x]}}</li>
         {% endfor %}
         <p></p>
         <p></p>
-        {% for x in finVizScreener["stocksCrossedBelowSMA"] %}
-          <li>Stocks Crossing below their {{x}} SMA: {{finVizScreener["stocksCrossedBelowSMA"][x]}}</li>
+        {% for x in finVizMarketScreen["stocksCrossedBelowSMA"] %}
+          <li>Stocks Crossing below their {{x}} SMA: {{finVizMarketScreen["stocksCrossedBelowSMA"][x]}}</li>
         {% endfor %}
       <p></p>
-      <h1>Total Stocks closing up today: {{finVizScreener["stocksClosingUpToday"]["up"]}}</h1>
-      {% for x in finVizScreener["stocksClosingUpToday"] %}
-        {% if finVizScreener["stocksClosingUpToday"][x] is not number %}
-          {{finVizScreener["stocksClosingUpToday"][x].to_html() | safe }}
+      <h1>Total Stocks closing up today: {{finVizMarketScreen["stocksClosingUpToday"]["up"]}}</h1>
+      {% for x in finVizMarketScreen["stocksClosingUpToday"] %}
+        {% if finVizMarketScreen["stocksClosingUpToday"][x] is not number %}
+          {{finVizMarketScreen["stocksClosingUpToday"][x].to_html() | safe }}
         {% elif x == "up" %}
         {% else %}
-          <li>Stocks Closing {{x}} % up today are {{finVizScreener["stocksClosingUpToday"][x]}}</li>
+          <li>Stocks Closing {{x}} % up today are {{finVizMarketScreen["stocksClosingUpToday"][x]}}</li>
         {% endif %}
       {% endfor %}
-      <h1>Total Stocks closing down today: {{finVizScreener["stocksClosingDownToday"]["down"]}}</h1>
-      {% for x in finVizScreener["stocksClosingDownToday"] %}
-        {% if finVizScreener["stocksClosingDownToday"][x] is not number %}
-          {{finVizScreener["stocksClosingDownToday"][x].to_html() | safe }}
+      <h1>Total Stocks closing down today: {{finVizMarketScreen["stocksClosingDownToday"]["down"]}}</h1>
+      {% for x in finVizMarketScreen["stocksClosingDownToday"] %}
+        {% if finVizMarketScreen["stocksClosingDownToday"][x] is not number %}
+          {{finVizMarketScreen["stocksClosingDownToday"][x].to_html() | safe }}
         {% elif x == "down" %}
         {% else %}
-          <li>Stocks Closing {{x}} % down today are {{finVizScreener["stocksClosingDownToday"][x]}}</li>
+          <li>Stocks Closing {{x}} % down today are {{finVizMarketScreen["stocksClosingDownToday"][x]}}</li>
         {% endif %}
       {% endfor %}
       <h1>Percent Gap from 52W High</h1>
-      {% for x in finVizScreener["stocks52WHighPercentGap"] %}
-        <li>Stocks closing {{x}} %  or more below 52wk High: {{finVizScreener["stocks52WHighPercentGap"][x]}}</li>
+      {% for x in finVizMarketScreen["stocks52WHighPercentGap"] %}
+        <li>Stocks closing {{x}} %  or more below 52wk High: {{finVizMarketScreen["stocks52WHighPercentGap"][x]}}</li>
       {% endfor %}
       <p></p>
       <h1>Percent Gap from 52W Low</h1>
-      {% for x in finVizScreener["stocks52WLowPercentGap"] %}
-        <li>Stocks closing {{x}} %  or more aboe 52wk Low: {{finVizScreener["stocks52WLowPercentGap"][x]}}</li>
+      {% for x in finVizMarketScreen["stocks52WLowPercentGap"] %}
+        <li>Stocks closing {{x}} %  or more aboe 52wk Low: {{finVizMarketScreen["stocks52WLowPercentGap"][x]}}</li>
       {% endfor %}
       {% endblock %}
    </body>

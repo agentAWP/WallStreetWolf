@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>FinViz Stock Screener Result</title>
+   </head>
+   <body>
+      {% extends "index.html" %}
+      {% block content %}
+      <h1> Stock Screener Results</h1>
+      {% for x in stockScreenResults %}
+          <h2>{{x | capitalize}}</h2>
+          <p> {{ stockScreenResults[x].to_html() | safe}}
+          <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+      {% endfor %}
+      {% endblock %}
+   </body>
+</html>

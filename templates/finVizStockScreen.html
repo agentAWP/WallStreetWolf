@@ -1,4 +1,5 @@
-<!-- <script>
+<!DOCTYPE html>
+<script>
   function add_field()
   {
     var total_text=document.getElementsByClassName("input_text");
@@ -14,30 +15,25 @@
     var total_text=document.getElementsByClassName("input_text");
     document.getElementById("input_text"+total_text.length+"_wrapper").remove();
   }
-</script> -->
+</script>
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
-      <title>Enter Market Ticker</title>
+      <title>FinViz Stock Screener</title>
    </head>
    <body>
       {% extends "index.html" %}
       {% block content %}
-      <h1>Enter one or more market symbols</h1>
-      <form action="/marketData/" method = "POST">
-        <!-- <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p> -->
-        <p><input type = "submit" name="symbol" value = "S&P500" ></p>
-      </form>
-      <!-- <h1>Enter one of more market symbols</h1>
-      <form action='/marketData/' method="post">
+      <h1>Enter upto 20 Tickers</h1>
+      <form action='/finVizStockScreenerResult/' method="post">
         <div id="wrapper">
           <input type="button" value="Enter Symbol" onclick="add_field();">
           <input type="button" value="Remove Symbol" onclick="remove_field();">
           <ol id="field_div">
           </ol>
         </div>
-          <input type='submit' value='ROCKET'>
-      </form> -->
+          <input type='submit' value='FinViz Screen'>
+      </form>
       {% endblock %}
    </body>
 </html>

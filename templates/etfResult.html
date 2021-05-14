@@ -63,7 +63,7 @@ tr:nth-child(even) {
 
 </style>
 <body>
-  {% extends "template.html" %}
+  {% extends "index.html" %}
   {% block content %}
   <h1>ETF Details</h1>
 
@@ -107,6 +107,20 @@ tr:nth-child(even) {
         </div>
       {% endif %}
     {%endfor%}
+  {% endif %}
+
+
+  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+  {% if commonStocks %}
+    <h3 style="text-align:left">Common Stocks among the ETFs are </h3>
+    {% for x in commonStocks %}
+      <div style="padding:5px; display:inline-block;">
+      <a>{{x}}</a>
+      </div>
+    {% endfor %}
+  {% elif commonStocks == 0 %}
+    <h3> Add one or two more ETFs for finding common stocks</h3>
   {% endif %}
 
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
