@@ -14,10 +14,7 @@ app = Flask(__name__)
 class Stock():
     def __init__(self,symbol,histData):
         self.symbol = symbol
-        # self.data = yf.Ticker(symbol)
         self.data = {}
-        # self.data["fiftyTwoWeekHigh"] = requests.get("https://fmpcloud.io/api/v3/quote/" + self.symbol.upper() + "?apikey=3a733d55d7e383c10eecc99e5f915307").json()[0]['yearHigh']
-        # self.data["fiftyTwoWeekLow"] = requests.get("https://fmpcloud.io/api/v3/quote/" + self.symbol.upper() + "?apikey=3a733d55d7e383c10eecc99e5f915307").json()[0]['yearLow']
         try:
             self.data["fiftyTwoWeekLow"] = float(self.stock52WeekRange()[0])
             self.data["fiftyTwoWeekHigh"] = float(self.stock52WeekRange()[1])
@@ -66,10 +63,6 @@ class Stock():
         return self.stock.iloc[:,self.stock.columns.get_loc("Close")].rolling(window=period).mean()
 
     def percentChangeSeries(self,period):
-        #Series of Close Prices until the previous day
-            #x = self.stock.iloc[:,self.stock.columns.get_loc("Close")][-1*(period+1):-1]
-        #Series of Close Prices until the current day
-            #y = self.stock.iloc[:,self.stock.columns.get_loc("Close")][-1*(period):]
 
         #RemovingIndexes and comparing
         s = pd.Series([self.stock.iloc[:,self.stock.columns.get_loc("Close")][-1*(period+1):-1].reset_index(drop=True),self.stock.iloc[:,self.stock.columns.get_loc("Close")][-1*(period):].reset_index(drop=True)]).pct_change()[1]*100
@@ -135,7 +128,6 @@ def zacksETFHoldings(ticker):
         req.headers.update(headers)
         for key in keys:
             r = req.get(url.format(key))
-            # print ("Holdings for " + key + " via " + f"{r.url}")
             stockList = re.findall(r'etf\\\/(.*?)\\', r.text)
     etfStocks = []
     for x in stockList:
@@ -158,7 +150,6 @@ def etfHoldingsCrossedBelowSMA(ticker,period):
                     if ticker.stock["Close"][-1] < smaToday:
                         print ("\n" + ticker.symbol + " crossed below their " + str(period) + " day moving average TODAY.\nClose Price:" + str(ticker.close) + "\n" + str(period) + "DaySMA: " + str(smaToday) + "\n")
                         allStocksbelowDaySMA.append(ticker.symbol)
-                        # allStocksbelowDaySMA[ticker.symbol] = ticker
         return allStocksbelowDaySMA
 
 # Returns ETF Holdings above/below their <period> Day SMA
@@ -176,10 +167,8 @@ def etfHoldingsAboveBelowSMA(ticker,period):
             if len(ticker.stock["Close"]) >= 2:
                 smaToday = ticker.simpleMovingAverage(period)[-1]
                 if ticker.close > smaToday:
-                    #print (ticker.symbol + " at price $" + str(ticker.close) + " is " + str(100*(ticker.close-smaToday)/ticker.close) + "% above its " + str(period) + " day SMA: $" + str(smaToday) )
                     above.append(ticker.symbol + " at price $" + str(ticker.close) + " is " + str(round(100*(ticker.close-smaToday)/ticker.close,2)) + "% above its " + str(period) + " day SMA: $" + str(smaToday) )
                 if ticker.close < smaToday:
-                    #print (ticker.symbol + " at price $" + str(ticker.close) + " is " + str(100*(smaToday-ticker.close)/smaToday) + "% below its " + str(period) + " day SMA: $" + str(smaToday) )
                     below.append(ticker.symbol + " at price $" + str(ticker.close) + " is " + str(round(100*(smaToday-ticker.close)/smaToday,2)) + "% below its " + str(period) + " day SMA: $" + str(smaToday) )
 
     print ("\n\nThere are " + str(len(above)) + " stocks above their " + str(period) + " SMA in the ETF\n")
@@ -208,14 +197,9 @@ def etfHoldingsfiftyTwoWeekHighLowChange(ticker):
         holdingsFiftyTwoWeekHighLowChange[ticker.symbol] = []
         print("\n" + x + ": $" + str(ticker.close))
         holdingsFiftyTwoWeekHighLowChange[ticker.symbol].append("\n" + x + ": $" + str(ticker.close))
-        # print ("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ".\nAll time Day High (Closing) is: " + str(ticker.max) + ".\nPercent Change in closing price is $: " + str(100*(ticker.max-ticker.close)/ticker.max))
-        # print ("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ". Percent Change from 52W High is: " + str(round(100*(ticker.data["fiftyTwoWeekHigh"]-ticker.close)/ticker.data["fiftyTwoWeekHigh"],2)) + "%")
         holdingsFiftyTwoWeekHighLowChange[ticker.symbol].append("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ". Percent Change from 52W High is: " + str(round(100*(ticker.data["fiftyTwoWeekHigh"]-ticker.close)/ticker.data["fiftyTwoWeekHigh"],2)) + "%")
-        # print ("52 Day Low (Intraday) is: " + str(ticker.data["fiftyTwoWeekLow"]) + ". Percent Change from 52W Low is: " + str(round(-100*(ticker.data["fiftyTwoWeekLow"]-ticker.close)/ticker.data["fiftyTwoWeekLow"],2))+ "%")
         holdingsFiftyTwoWeekHighLowChange[ticker.symbol].append("52 Day Low (Intraday) is: " + str(ticker.data["fiftyTwoWeekLow"]) + ". Percent Change from 52W Low is: " + str(round(-100*(ticker.data["fiftyTwoWeekLow"]-ticker.close)/ticker.data["fiftyTwoWeekLow"],2))+ "%")
-        # ColumnNames returns the date when Stock was at Max. Price. We use the 'isin' function to find at date when stock price was MAX
         columnNames = list(ticker.stock["Close"].isin([ticker.max])[ticker.stock["Close"].isin([ticker.max]) == True].index)[0].date()
-        # print (ticker.symbol +" ($" + str(round(ticker.close,2)) + ") is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-datetime.date.today()).days) + " days ago on " + str(columnNames))
         holdingsFiftyTwoWeekHighLowChange[ticker.symbol].append(ticker.symbol +" ($" + str(round(ticker.close,2)) + ") is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-datetime.date.today()).days) + " days ago on " + str(columnNames))
     return holdingsFiftyTwoWeekHighLowChange
 
@@ -361,14 +345,9 @@ def stocksfiftyTwoWeekHighLowChange(ticker):
     for x in allStocks:
         ticker = allStocks[x]
         print("\n" + x + ": $" + str(ticker.close))
-        # print ("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ".\nAll time Day High (Closing) is: " + str(ticker.max) + ".\nPercent Change in closing price is $: " + str(100*(ticker.max-ticker.close)/ticker.max))
-        #print ("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ". Percent Change from 52W High is: " + str(round(100*(ticker.data["fiftyTwoWeekHigh"]-ticker.close)/ticker.data["fiftyTwoWeekHigh"],2)) + "%")
         fiftyTwoWeekHighLowChange.append("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ". Percent Change from 52W High is: " + str(round(100*(ticker.data["fiftyTwoWeekHigh"]-ticker.close)/ticker.data["fiftyTwoWeekHigh"],2)) + "%")
-        #print ("52 Day Low (Intraday) is: " + str(ticker.data["fiftyTwoWeekLow"]) + ". Percent Change from 52W Low is: " + str(round(-100*(ticker.data["fiftyTwoWeekLow"]-ticker.close)/ticker.data["fiftyTwoWeekLow"],2))+ "%")
         fiftyTwoWeekHighLowChange.append("52 Day Low (Intraday) is: " + str(ticker.data["fiftyTwoWeekLow"]) + ". Percent Change from 52W Low is: " + str(round(-100*(ticker.data["fiftyTwoWeekLow"]-ticker.close)/ticker.data["fiftyTwoWeekLow"],2))+ "%")
-        # ColumnNames returns the date when Stock was at Max. Price. We use the 'isin' function to find at date when stock price was MAX
         columnNames = list(ticker.stock["Close"].isin([ticker.max])[ticker.stock["Close"].isin([ticker.max]) == True].index)[0].date()
-        #print (ticker.symbol +" ($" + str(round(ticker.close,2)) + ") is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-datetime.date.today()).days) + " days ago on " + str(columnNames))
         fiftyTwoWeekHighLowChange.append(ticker.symbol + " is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-datetime.date.today()).days) + " days ago on " + str(columnNames))
 
     return fiftyTwoWeekHighLowChange
@@ -465,12 +444,6 @@ def yahooStats(ticker):
             yahooStats = {}
             yahooStats["ValuationMeasures"] = fundamentals[0].set_index(fundamentals[0].columns[0]).rename_axis("Valuation Measures").rename(columns={"As of Date: 3/4/2021Current":"Current"})
             yahooStats["StockPriceHistory"] = fundamentals[1].set_index(fundamentals[1].columns[0]).rename_axis("Stock Price History").rename(columns={1:""})
-            # yahooStats["ShareStatistics"] = fundamentals[2].set_index(fundamentals[2].columns[0]).rename_axis("Share Statistics").rename(columns={1:""})
-            # yahooStats["DividendandSplits"] = fundamentals[3].set_index(fundamentals[3].columns[0]).rename_axis("Dividends & Splits").rename(columns={1:""})
-            # yahooStats["ManagementEffectiveness"] = fundamentals[6].set_index(fundamentals[6].columns[0]).rename_axis("Management Effectiveness").rename(columns={1:""})
-            # yahooStats["IncomeStatement"] = fundamentals[7].set_index(fundamentals[7].columns[0]).rename_axis("Income Statement").rename(columns={1:""})
-            # yahooStats["BalanceSheet"] = fundamentals[8].set_index(fundamentals[8].columns[0]).rename_axis("Balance Sheet").rename(columns={1:""})
-            # yahooStats["CashFlowStatement"] = fundamentals[9].set_index(fundamentals[9].columns[0]).rename_axis("Cash Flow Statement").rename(columns={1:""})
         return yahooStats
     except:
         return {"error":"Could not load yahooStats. Ticker should be an individual stock and not ETF/Index Fund"}
@@ -722,7 +695,6 @@ def stockETFExposure(ticker):
 # print ("------------------------------------------------------------------------------------")
 
 @app.route('/')
-# @auth_required
 def home():
     return render_template("home.html")
 
@@ -835,21 +807,6 @@ def etfResult():
     if len(values) == 2:
         etfComparison = askFinny(values)
 
-    # # List Top Holdings by Weight
-    # # Run Stock analysis on Top Ten Holdings
-    # # Using ETFdb
-    # Too Heavy as lot of time is consumed in gathering YahooData
-    # if len(values) == 10:
-    #     x = values[0]
-    #     etfHoldings2[x] = etfDBHoldings(x)
-    #     topTenHoldings = list(etfHoldings2[x].keys())[:10]
-    #     print (topTenHoldings)
-    #     topTenStocks = getStocks(topTenHoldings)
-    #     etfStocksHigher[x] = etfHoldingsClosedHigher(topTenStocks)
-    #     etfStocksLower[x] = etfHoldingsClosedLower(topTenStocks)
-    #     etfHoldingsfiftyTwoWeekChange[x] = etfHoldingsfiftyTwoWeekHighLowChange(topTenStocks)
-    #     topTenStocks = {}
-
     return render_template("etfResult.html",etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfComparison=etfComparison,etfHoldings=etfHoldings,commonStocks=commonStocks,allETFs=allETFs)
 
 @app.route("/markets/")
@@ -865,21 +822,12 @@ def marketData():
 
 @app.route("/sectorTopTenHoldings/",methods = ["GET"])
 def sectorTopTenHoldings():
-
-    # allSectors = {}
-    # for x in industrySectors()["Vanguard Sector ETF"].values:
-    # # for x in ["VGT","VFH"]:
-    #     allSectors[x] = pd.DataFrame.from_dict(etfDBHoldings(x),orient="index",columns=[x])
-    # print (allSectors)
-    # return render_template("sectorTopTenHoldings.html",allSectors=allSectors)
-
     allSectorsHoldingsByWeights = {}
     sectorList = industrySectors().iloc[:, 0].index.tolist()
     sectorHoldings = industrySectors()["Vanguard Sector ETF"].values.tolist()
 
     for x in range(0,len(sectorList)):
         allSectorsHoldingsByWeights[sectorList[x]] = pd.DataFrame.from_dict(etfDBHoldings(sectorHoldings[x]),orient="index",columns=[sectorHoldings[x]])
-    # print (allSectorsHoldingsByWeights)
     return render_template("sectorTopTenHoldings.html",allSectorsHoldingsByWeights=allSectorsHoldingsByWeights)
 
 @app.route("/companyFinancials/")
