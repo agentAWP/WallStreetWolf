@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup as soup
 from urllib.request import Request, urlopen
 
 app = Flask(__name__)
-app.secret_key = 'spooky action at a distance-Einstein'
 
 class Stock():
     def __init__(self,symbol,histData):
@@ -851,11 +850,6 @@ def about():
 def headers():
     res = {k:v for k, v in request.headers.items()}
     return res
-
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect("https://investor.oldtrafford.cf")
 
 
 if __name__ == '__main__':
