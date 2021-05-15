@@ -707,6 +707,22 @@ def stockETFExposure(ticker):
     a = a[0].set_index(a[0].columns[0])
     return a
 
+def finVizStockScreener(tickers):
+    stockScreenResults = {}
+    screens = {"overivew":112,"valuation": 122, "financial":162,"performance":142,"technical":172}
+    for tab in screens:
+        url = "https://finviz.com/screener.ashx?v=" + str(screens[tab]) + "&t="
+        for x in tickers:
+            url += x + ","
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        html = soup(webpage, "html.parser")
+        stockScreenResults[tab] = pd.read_html(str(html))[6]
+        stockScreenResults[tab] = stockScreenResults[tab].drop(columns=0)
+        stockScreenResults[tab] = stockScreenResults[tab].set_index(stockScreenResults[tab].columns[0])
+        stockScreenResults[tab] = stockScreenResults[tab].rename_axis(tab)
+    return stockScreenResults
+
 # print ("------------------------------------------------------------------------------------")
 
 
