@@ -12,14 +12,8 @@ import json
 import yfinance as yf
 import pandas as pd
 from pandas_datareader import data as pdr
-import alpaca_trade_api as tradeapi
 import requests,datetime,re,time
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib_venn import venn2
-from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField, validators, FieldList, FormField
-from wtforms.validators import DataRequired
 from bs4 import BeautifulSoup as soup
 from urllib.request import Request, urlopen
 
