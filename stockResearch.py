@@ -125,7 +125,7 @@ def getStocks(assets):
 
 # US Industry Sectors, their stockTickers:weight
 def industrySectors():
-    df = pd.read_html("~/Desktop/Investing/Finance/index.html")[0]
+    df = pd.read_html("./templates/S&P500Market.html")[0]
     df.set_index(["S&P 500 Index Sectors"],inplace=True)
     return df
 
