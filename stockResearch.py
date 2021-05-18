@@ -844,9 +844,8 @@ def etfResult():
 
     #Initialize Variables
     etfComparison,etfTickers,etfHoldings,etfHoldings2 = {},{},{},{}
-    etfTopTenHoldings,etfHoldingsfiftyTwoWeekChange,etfStocksLower,etfStocksHigher = {}, {},{},{}
+    etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {},{},{}
     topTenHoldings =[]
-    commonStocks = 0
 
     #Calculates Price Movement and 52WRange for Top Ten holdings
     for x in values:
@@ -870,21 +869,7 @@ def etfResult():
             etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
 
 
-    #Find common stocks using Zack
-    if len(values) == 2:
-        commonStocks = set(zacksETFHoldings(values[0]))&set(zacksETFHoldings(values[1]))
-    elif len(values) == 3:
-        s1 = set(zacksETFHoldings(values[0]))
-        s2 = set(zacksETFHoldings(values[1]))
-        s3 = set(zacksETFHoldings(values[2]))
-        intersection1 = s1.intersection(s2)
-        commonStocks = intersection1.intersection(s3)
-
-    #AskFinnyDetailed ETF Comparison
-    if len(values) == 2:
-        etfComparison = askFinny(values)
-
-    return render_template("etfResult.html",etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfComparison=etfComparison,etfHoldings=etfHoldings,commonStocks=commonStocks,allETFs=allETFs)
+    return render_template("etfResult.html",etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
 
 
 ###############################################

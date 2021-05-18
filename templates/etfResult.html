@@ -93,50 +93,6 @@ tr:nth-child(even) {
   {% endfor %}
 
 
-  {% if etfComparison %}
-    <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
-    <h3 style="text-align:left">ETF Performance</h3>
-    <h4 style="text-align:left">Overall Comparison</h4>
-    <p>{{etfComparison["overall"].to_html() | safe }}<p>
-
-    {% for x in etfComparison %}
-      {% if x != "overall" %}
-        <div style="padding:10px; display:inline-block;">
-        <h4 style="text-align:left">{{x}} Returns</h4>
-        <p>{{etfComparison[x].to_html() | safe}}<p>
-        </div>
-      {% endif %}
-    {%endfor%}
-  {% endif %}
-
-
-  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
-
-  {% if commonStocks %}
-    <h3 style="text-align:left">Common Stocks among the ETFs are </h3>
-    {% for x in commonStocks %}
-      <div style="padding:5px; display:inline-block;">
-      <a>{{x}}</a>
-      </div>
-    {% endfor %}
-  {% elif commonStocks == 0 %}
-    <h3> Add one or two more ETFs for finding common stocks</h3>
-  {% endif %}
-
-  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
-
-  {% for tick in etfHoldingsfiftyTwoWeekChange %}
-    <h3 style="text-align:left">Top 10 Holdings 52 Week Change for {{tick}}</h3>
-    {% for symb in etfHoldingsfiftyTwoWeekChange[tick] %}
-      {% for data in etfHoldingsfiftyTwoWeekChange[tick][symb] %}
-        <li>{{data}}</li>
-      {% endfor %}
-      <hr>
-    {% endfor %}
-    <p></p>
-  {% endfor %}
-
-
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
   <div class="row">
