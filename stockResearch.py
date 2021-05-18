@@ -389,6 +389,30 @@ def percentChangePeriod(ticker):
             percentChangeDict[period] = -100*(ticker.stock["Close"][-period:][0]-ticker.close)/ticker.stock["Close"][-period:][0]
     return percentChangeDict
 
+#Returns SMA Indicators for ETFs
+def etfSMAMovement(etf):
+    etfSMA = {}
+    if isinstance(etf,str):
+        allStocks = {}
+        allStocks[etf] = getStocks(etf)
+    if isinstance(etf,list):
+        allStocks = getStocks(etf)
+    if isinstance (etf,Stock):
+        allStocks={}
+        allStocks[etf.symbol]=etf
+    for etf in allStocks:
+        sma = {}
+        a = allStocks[etf]
+        for x in (20,50,100,200):
+            if a.simpleMovingAverage(x)[-1] > a.close:
+                sma[x] = a.symbol + " is " + str(round(100*(a.simpleMovingAverage(x)[-1]-a.close)/a.close)) + "% lower than its " + str(x) + " day SMA: " + str(a.simpleMovingAverage(x)[-1])
+            elif a.simpleMovingAverage(x)[-1] < a.close:
+                sma[x] = a.symbol + " is " + str(round(100*(a.close - a.simpleMovingAverage(x)[-1])/a.close)) + "% higher than its " + str(x) + " day SMA: " + str(a.simpleMovingAverage(x)[-1])
+            elif a.simpleMovingAverage(x)[-1] == a.close:
+                sma[x] = a.symbol + " is at its " + str(x) + " day SMA"
+        etfSMA[etf] = sma
+    return etfSMA
+
 def emaIndicators(ticker):
     if isinstance(ticker,Stock):
         allStocks = {}
@@ -844,7 +868,8 @@ def etfResult():
 
     #Initialize Variables
     etfComparison,etfTickers,etfHoldings,etfHoldings2 = {},{},{},{}
-    etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {},{},{}
+    etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {}, {}
+    etfSMA = {}
     topTenHoldings =[]
 
     #Calculates Price Movement and 52WRange for Top Ten holdings
@@ -854,6 +879,8 @@ def etfResult():
         stockData = priceMovementFinViz(topTenHoldings)
         etfTopTenHoldings[x] = stockData
 
+    #ETF SMA movement
+    etfSMA = etfSMAMovement(values)
 
     # Find all Holdings and thier Weight in the portfolio
     for x in values:
@@ -869,7 +896,7 @@ def etfResult():
             etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
 
 
-    return render_template("etfResult.html",etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
+    return render_template("etfResult.html",etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
 
 
 ###############################################
