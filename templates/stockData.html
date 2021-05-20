@@ -101,6 +101,20 @@
 
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
+      <p><b><u>Recent SEC Filings</u></b></p>
+      {% for ticker in stockSECFilings %}
+        <u><b>{{ticker}}</b></u>
+        <p></p>
+        {% if stockSECFilings[ticker] is string %}
+          <p>{{stockSECFilings[ticker]}}. <a href="https://whalewisdom.com/stock/{{ticker}}"> Click here for more information!</a></p>
+        {% else %}
+          <p>{{stockSECFilings[ticker].to_html() | safe}}</p>
+        {% endif %}
+        <p></p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
 
       {% endblock %}
    </body>

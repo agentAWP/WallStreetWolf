@@ -747,6 +747,28 @@ def finVizStockScreener(tickers):
         stockScreenResults[tab] = stockScreenResults[tab].rename_axis(tab)
     return stockScreenResults
 
+def filingsSEC(ticker):
+    secFilings = {}
+    if isinstance(ticker,str):
+        allStocks = {}
+        allStocks[ticker] = getStocks(ticker)
+    if isinstance(ticker,list):
+        allStocks = getStocks(ticker)
+    if isinstance (ticker,Stock):
+        allStocks={}
+        allStocks[ticker.symbol]=ticker
+    for stock in allStocks:
+        url = "https://whalewisdom.com/stock/" + stock
+        try:
+            a = pd.read_html(url)
+            secTable = a[1]
+            secTable = secTable.set_index(secTable.columns[0])
+            # print (secTable.head(secTable.shape[0] -2))
+            secFilings[stock] = secTable.head(secTable.shape[0] -2)
+        except:
+            secFilings[stock] = "No SEC filings found"
+    return secFilings
+
 # print ("------------------------------------------------------------------------------------")
 
 
@@ -797,6 +819,7 @@ def stocks():
 def stockData():
     values = [request.form["symbol"]]
     allStocks = getStocks(values)
+    stockSECFilings = filingsSEC(values)
     dcfTool = {}
     smaDeviation,percentChange, fiftyTwoWeekHighLowChange,finViz, dcf, ema, finRatios, stockETF= {}, {}, {}, {}, {}, {}, {},{}
     for x in values:
@@ -819,7 +842,7 @@ def stockData():
         dcf[stock] = dcfValue(ticker)
         ema[stock] = emaIndicators(ticker)
 
-    return render_template("stockData.html",stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
+    return render_template("stockData.html",stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
 
 ###############################################
 #          Render Fundamentals page           #
