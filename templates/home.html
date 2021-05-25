@@ -1,15 +1,28 @@
 <!DOCTYPE html>
+
 <html lang="en" dir="ltr">
    <head>
-      <meta charset="utf-8">
+      <meta charset="utf-16">
       <title>Moon Investor!!!</title>
+      <style>
+         .rainbow-lr {
+                     background: linear-gradient(to right, crimson, chocolate , gold, darkgreen, midnightblue, blue, violet);
+                     color:transparent;
+                     background-clip: text;
+         }
+      </style>
    </head>
    <body>
       {% extends "index.html" %}
       {% block content %}
-      <h1>Get your Stock analysis here</h1>
-      <p> This is a fun project</p>
-      <p> Use for informational purposes only</p>
+      <h1>Stock analysis App</h1>   
+      <h2><u><span class="rainbow-lr">WFH investor, long time Reddit lurker, Diamond Hands Value Investing</span></u></h2>
+      <ul>
+      <li><h3 style="color:mediumpurple;">Time in the market >>>>> Timing the market.</h3></li>
+      <li><h3 style="color:steelblue"> Buy and Never Sell. Stonks go up</h3></li>
+      <li><h3 style="color:indigo"> This is a fun project</h3></li>
+      <li><h3 style="color:darkorange"> Use for informational purposes only</h3></li>
+      </ul>
       {% endblock %}
    </body>
 </html>

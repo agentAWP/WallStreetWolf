@@ -777,7 +777,6 @@ def filingsSEC(ticker):
 ###############################################
 topbar = Navbar(
                 View('Home', 'home'),
-                View('About', 'about'),
                 View('Stocks', 'stocks'),
                 View('Fundamental', 'fundamentals'),
                 View('ETFs', 'etf'),
@@ -797,13 +796,6 @@ nav.register_element('top', topbar)
 @app.route('/')
 def home():
     return render_template("home.html")
-
-###############################################
-#          Render About page                  #
-###############################################
-@app.route("/about")
-def about():
-  return render_template("about.html")
 
 ###############################################
 #          Render Stocks page                 #
