@@ -809,7 +809,7 @@ def stocks():
 ###############################################
 @app.route("/stockData/",methods = ["GET","POST"])
 def stockData():
-    values = [request.form["symbol"]]
+    values = [request.form["symbol"].upper()]
     allStocks = getStocks(values)
     stockSECFilings = filingsSEC(values)
     dcfTool = {}
@@ -847,7 +847,7 @@ def fundamentals():
 ###############################################
 @app.route("/fundaResult/",methods = ["GET","POST"])
 def fundaResult():
-    tickers = [request.form["symbol"]]
+    tickers = [request.form["symbol"].upper()]
     values = tickers
     stockStatements = {}
     allStocks = getStocks(values)
@@ -878,7 +878,7 @@ def etf():
 ###############################################
 @app.route("/etfResult/",methods = ["GET","POST"])
 def etfResult():
-    values = [request.form["symbol"]]
+    values = [request.form["symbol"].upper()]
     allETFs = getStocks(values)
 
     #Initialize Variables
@@ -956,7 +956,7 @@ def companyFinancialsComparison():
 ###############################################
 @app.route("/companyFinancialsComparisonResult/",methods = ["GET","POST"])
 def companyFinancialsComparisonResult():
-    tickers = [request.form["symbol"]]
+    tickers = [request.form["symbol"].upper()]
     stockStatements = {}
     for ticker in tickers:
         stockStatements[ticker] = stockanalysisFundamentals(ticker)
