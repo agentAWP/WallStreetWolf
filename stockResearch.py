@@ -1015,7 +1015,8 @@ def etfResult():
     for x in values:
         etfTA[x] = techAnalysis(x)
         etfTASignals[x] = techSignals(x)
-    print (etfTASignals)
+
+        
     # Find all Holdings and thier Weight in the portfolio
     for x in values:
         r = requests.get("https://financialmodelingprep.com/api/v3/etf-holder/" + x + "?apikey=308ce961a124eb43de86045c7340dac1",headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"})
