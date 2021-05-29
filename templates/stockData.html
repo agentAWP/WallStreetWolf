@@ -87,6 +87,17 @@
 
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
+      {% for ticker in tickerTA %}
+      <p><b><u>Technical Analysis {{ticker}}</u></b></p>
+      {% for metric in tickerTA[ticker] %}
+        <p>{{tickerTA[ticker][metric][0]}}</p>
+        {{tickerTA[ticker][metric][1].to_html() | center | safe }}
+        <p></p>
+      {%endfor%}
+    {% endfor %}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
       <p><b><u>ETF Exposure</u></b></p>
       {% for ticker in stockETF %}
         <u><b>{{ticker}}</b></u>
