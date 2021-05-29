@@ -158,6 +158,16 @@
 
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
+      {% for ticker in tickerTASignals %}
+        <p><b><u>Technical Signals {{ticker}}</u></b></p>
+        {% for signal in tickerTASignals[ticker] %}
+          <p>{{tickerTASignals[ticker][signal].to_html() | safe}}</p>
+          <p></p>
+        {%endfor%}
+      {% endfor %}
+
+    <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
       <p><b><u>ETF Exposure</u></b></p>
       {% for ticker in stockETF %}
         <u><b>{{ticker}}</b></u>

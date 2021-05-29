@@ -847,6 +847,37 @@ def techAnalysis(ticker):
             techAnalysisMetrics["stoch"] = ["A stochastic oscillator is a momentum indicator comparing a particular closing price of a security to a range of its prices over a certain period of time.\nTraditionally, readings over 80 are considered in the overbought range, and readings under 20 are considered oversold.",stoch]
     return techAnalysisMetrics
 
+#From financhill.com
+def techSignals(ticker):
+    signalsTech = {}
+    try:
+        url = "https://financhill.com/stock-price-chart/" + ticker +"-technical-analysis"
+
+        signals = pd.read_html(url)
+        signalSMAEMA = signals[0]
+        signalSMAEMA = signalSMAEMA.set_index(signalSMAEMA.columns[0])
+        # signalSMAEMA.index.names = ["SMA and EMA"]
+        signalSMAEMA.index.names = [""]
+        signalSMAEMA.columns = ["Level","Buy or Sell"]
+        signalsTech["SMA and EMA"] = signalSMAEMA
+
+        signalRSIMACD = signals[1]
+        signalRSIMACD = signalRSIMACD.set_index(signalRSIMACD.columns[0])
+        # signalRSIMACD.index.names = ["RSI + MACD"]
+        signalRSIMACD.index.names = [""]
+        signalRSIMACD.columns = ["Level","Buy or Sell"]
+        signalRSIMACD = signalRSIMACD.drop(labels="Chaikin Money Flow:",axis=0)
+        signalsTech["RSI and MACD"] = signalRSIMACD
+
+        signalBB = signals[2]
+        signalBB = signalBB.set_index(signalBB.columns[0])
+        # signalBB.index.names = ["Bollinger Bands"]
+        signalBB.index.names = [""]
+        signalBB.columns = ["Level","Buy or Sell"]
+        signalsTech["Bollinger Bands"] = signalBB
+    except:
+        signalsTech["error"] = "Technical Analysis not Found"
+    return signalsTech
 
 
 # print ("------------------------------------------------------------------------------------")
@@ -893,11 +924,11 @@ def stockData():
     allStocks = getStocks(values)
     stockSECFilings = filingsSEC(values)
     dcfTool = {}
-    tickerTA,smaDeviation,percentChange, fiftyTwoWeekHighLowChange,finViz, dcf, ema, finRatios, stockETF= {}, {}, {}, {}, {}, {}, {},{},{}
+    tickerTASignals,tickerTA,smaDeviation,percentChange, fiftyTwoWeekHighLowChange,finViz, dcf, ema, finRatios, stockETF= {}, {}, {}, {}, {}, {}, {},{},{},{}
     for x in values:
         stockETF[x] = stockETFExposure(x)
         tickerTA[x] = techAnalysis(x)
-    print (stockETF)
+        tickerTASignals[x] = techSignals(x)
     for stock in allStocks:
         ticker = allStocks[stock]
         a = {}
@@ -915,7 +946,7 @@ def stockData():
         dcf[stock] = dcfValue(ticker)
         ema[stock] = emaIndicators(ticker)
 
-    return render_template("stockData.html",tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
+    return render_template("stockData.html",tickerTASignals=tickerTASignals,tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
 
 ###############################################
 #          Render Fundamentals page           #
@@ -964,7 +995,7 @@ def etfResult():
 
     #Initialize Variables
     etfComparison,etfTickers,etfHoldings,etfHoldings2 = {},{},{},{}
-    etfTA,etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {}, {},{}
+    etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {}, {}
     etfSMA = {}
     topTenHoldings =[]
 
@@ -974,11 +1005,17 @@ def etfResult():
         topTenHoldings = list(etfHoldings2[x].keys())[:10]
         stockData = priceMovementFinViz(topTenHoldings)
         etfTopTenHoldings[x] = stockData
-        etfTA[x] = techAnalysis(x)
+        
 
     #ETF SMA movement
     etfSMA = etfSMAMovement(values)
 
+    etfTA, etfTASignals = {},{}
+    #Calculate Technical Analysis
+    for x in values:
+        etfTA[x] = techAnalysis(x)
+        etfTASignals[x] = techSignals(x)
+    print (etfTASignals)
     # Find all Holdings and thier Weight in the portfolio
     for x in values:
         r = requests.get("https://financialmodelingprep.com/api/v3/etf-holder/" + x + "?apikey=308ce961a124eb43de86045c7340dac1",headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"})
@@ -993,7 +1030,7 @@ def etfResult():
             etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
 
 
-    return render_template("etfResult.html",etfTA=etfTA,etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
+    return render_template("etfResult.html",etfTASignals=etfTASignals,etfTA=etfTA,etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
 
 
 ###############################################

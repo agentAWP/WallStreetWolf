@@ -103,6 +103,14 @@ tr:nth-child(even) {
 
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
+  {% for ticker in etfTASignals %}
+    <p><b><u>Technical Signals {{ticker}}</u></b></p>
+    {% for signal in etfTASignals[ticker] %}
+      <p>{{etfTASignals[ticker][signal].to_html() | safe}}</p>
+      <p></p>
+    {%endfor%}
+  {% endfor %}
+
   {% for etf in etfTopTenHoldings %}
     <div style="padding:10px; display:inline-block;">
     <h3 style="text-align:left">Top 10 Holdings Day Movement in {{etf}}</h3>
