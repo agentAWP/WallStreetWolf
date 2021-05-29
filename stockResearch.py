@@ -964,7 +964,7 @@ def etfResult():
 
     #Initialize Variables
     etfComparison,etfTickers,etfHoldings,etfHoldings2 = {},{},{},{}
-    etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {}, {}
+    etfTA,etfTopTenHoldings,etfStocksLower,etfStocksHigher = {}, {}, {},{}
     etfSMA = {}
     topTenHoldings =[]
 
@@ -974,6 +974,7 @@ def etfResult():
         topTenHoldings = list(etfHoldings2[x].keys())[:10]
         stockData = priceMovementFinViz(topTenHoldings)
         etfTopTenHoldings[x] = stockData
+        etfTA[x] = techAnalysis(x)
 
     #ETF SMA movement
     etfSMA = etfSMAMovement(values)
@@ -992,7 +993,7 @@ def etfResult():
             etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
 
 
-    return render_template("etfResult.html",etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
+    return render_template("etfResult.html",etfTA=etfTA,etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
 
 
 ###############################################

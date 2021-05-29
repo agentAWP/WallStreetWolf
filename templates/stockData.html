@@ -4,6 +4,66 @@
       <meta charset="utf-8">
       <title>Stock Results</title>
    </head>
+
+<style>
+
+  * {
+  
+    box-sizing: border-box;
+  
+  }
+  
+  .row {
+  
+    margin-left:-5px;
+  
+    margin-right:-5px;
+  
+  }
+  .column {
+  
+    float: left;
+  
+    width: 25%;
+  
+    padding: 5px;
+  
+  }
+  /* Clearfix (clear floats) */
+  
+  .row::after {
+  
+    content: "";
+  
+    clear: both;
+  
+    display: table;
+  
+  }
+  table {
+  
+    border-collapse: collapse;
+  
+    border-spacing: 0;
+  
+    width: 50%;
+  
+    border: 1px solid #ddd;
+  
+  }
+  th, td {
+  
+    text-align: center;
+  
+  }
+  tr:nth-child(even) {
+  
+    background-color: #f2f2f2;
+  
+  }
+  
+</style>
+  
    <body>
       {% extends "index.html" %}
       {% block content %}
@@ -88,13 +148,13 @@
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
       {% for ticker in tickerTA %}
-      <p><b><u>Technical Analysis {{ticker}}</u></b></p>
-      {% for metric in tickerTA[ticker] %}
-        <p>{{tickerTA[ticker][metric][0]}}</p>
-        {{tickerTA[ticker][metric][1].to_html() | center | safe }}
-        <p></p>
-      {%endfor%}
-    {% endfor %}
+        <p><b><u>Technical Analysis {{ticker}}</u></b></p>
+        {% for metric in tickerTA[ticker] %}
+          <p>{{tickerTA[ticker][metric][0]}}</p>
+          {{tickerTA[ticker][metric][1].to_html() | safe }}
+          <p></p>
+        {%endfor%}
+      {% endfor %}
 
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
