@@ -879,6 +879,14 @@ def techSignals(ticker):
         signalsTech["error"] = "Technical Analysis not Found"
     return signalsTech
 
+#Returns Major Recent Stock Activity from Super Investors (Dataroma.com)
+def recentStockActivity(ticker):
+    recentActivityURL = "https://www.dataroma.com/m/activity.php?sym="+ ticker + "&typ=a"
+    recentActivity = pd.read_html(recentActivityURL)[1]
+    recentActivity = recentActivity.replace(to_replace=r'&nbsp', value='', regex=True)
+    recentActivity = recentActivity.drop([recentActivity.columns[0],recentActivity.columns[5]],axis=1)
+    recentActivity = recentActivity.set_index(recentActivity.columns[0])
+    return recentActivity
 
 # print ("------------------------------------------------------------------------------------")
 
@@ -923,12 +931,13 @@ def stockData():
     values = [request.form["symbol"].upper()]
     allStocks = getStocks(values)
     stockSECFilings = filingsSEC(values)
-    dcfTool = {}
+    stockPortfolioManagerActivity,dcfTool = {},{}
     tickerTASignals,tickerTA,smaDeviation,percentChange, fiftyTwoWeekHighLowChange,finViz, dcf, ema, finRatios, stockETF= {}, {}, {}, {}, {}, {}, {},{},{},{}
     for x in values:
         stockETF[x] = stockETFExposure(x)
         tickerTA[x] = techAnalysis(x)
         tickerTASignals[x] = techSignals(x)
+        stockPortfolioManagerActivity[x] = recentStockActivity(x)
     for stock in allStocks:
         ticker = allStocks[stock]
         a = {}
@@ -946,7 +955,7 @@ def stockData():
         dcf[stock] = dcfValue(ticker)
         ema[stock] = emaIndicators(ticker)
 
-    return render_template("stockData.html",tickerTASignals=tickerTASignals,tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
+    return render_template("stockData.html",stockPortfolioManagerActivity=stockPortfolioManagerActivity,tickerTASignals=tickerTASignals,tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
 
 ###############################################
 #          Render Fundamentals page           #
