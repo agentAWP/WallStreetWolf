@@ -5,7 +5,7 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import *
-from dominate.tags import img
+from dominate.tags import col, img
 from flask import Flask, request, render_template, session, url_for,make_response
 from functools import wraps
 import json
@@ -876,17 +876,31 @@ def techSignals(ticker):
         signalBB.columns = ["Level","Buy or Sell"]
         signalsTech["Bollinger Bands"] = signalBB
     except:
-        signalsTech["error"] = "Technical Analysis not Found"
+        signalsTech["error"] = pd.DataFrame({'ERROR':  ['Technial Analysis Not Found']})
     return signalsTech
 
 #Returns Major Recent Stock Activity from Super Investors (Dataroma.com)
+def stockOwnership(ticker):
+    try:
+        tickerOwnershipURL = "https://www.dataroma.com/m/stock.php?sym="+ ticker
+        tickerOwnership = pd.read_html(tickerOwnershipURL)[2]
+        tickerOwnership = tickerOwnership.set_index(tickerOwnership.columns[1])
+        tickerOwnership = tickerOwnership.drop(tickerOwnership.columns[0],axis=1)
+        return tickerOwnership
+    except:
+        x = {'ERROR':  ['No Data Found in Dataroma.com']}
+        return pd.DataFrame(x)
 def recentStockActivity(ticker):
-    recentActivityURL = "https://www.dataroma.com/m/activity.php?sym="+ ticker + "&typ=a"
-    recentActivity = pd.read_html(recentActivityURL)[1]
-    recentActivity = recentActivity.replace(to_replace=r'&nbsp', value='', regex=True)
-    recentActivity = recentActivity.drop([recentActivity.columns[0],recentActivity.columns[5]],axis=1)
-    recentActivity = recentActivity.set_index(recentActivity.columns[0])
-    return recentActivity
+    try:
+        recentActivityURL = "https://www.dataroma.com/m/activity.php?sym="+ ticker + "&typ=a"
+        recentActivity = pd.read_html(recentActivityURL)[1]
+        recentActivity = recentActivity.replace(to_replace=r'&nbsp', value='', regex=True)
+        recentActivity = recentActivity.drop([recentActivity.columns[0],recentActivity.columns[5]],axis=1)
+        recentActivity = recentActivity.set_index(recentActivity.columns[0])
+        return recentActivity
+    except:
+        x = {'ERROR':  ['No Data Found in Dataroma.com']}
+        return pd.DataFrame(x)
 
 # print ("------------------------------------------------------------------------------------")
 
@@ -931,13 +945,15 @@ def stockData():
     values = [request.form["symbol"].upper()]
     allStocks = getStocks(values)
     stockSECFilings = filingsSEC(values)
-    stockPortfolioManagerActivity,dcfTool = {},{}
+    stockPortfolioManagerActivity,stockMajorOwnership,dcfTool = {},{},{}
     tickerTASignals,tickerTA,smaDeviation,percentChange, fiftyTwoWeekHighLowChange,finViz, dcf, ema, finRatios, stockETF= {}, {}, {}, {}, {}, {}, {},{},{},{}
     for x in values:
         stockETF[x] = stockETFExposure(x)
         tickerTA[x] = techAnalysis(x)
         tickerTASignals[x] = techSignals(x)
         stockPortfolioManagerActivity[x] = recentStockActivity(x)
+        stockMajorOwnership[x] = stockOwnership(x)
+    print (stockPortfolioManagerActivity)
     for stock in allStocks:
         ticker = allStocks[stock]
         a = {}
@@ -955,7 +971,7 @@ def stockData():
         dcf[stock] = dcfValue(ticker)
         ema[stock] = emaIndicators(ticker)
 
-    return render_template("stockData.html",stockPortfolioManagerActivity=stockPortfolioManagerActivity,tickerTASignals=tickerTASignals,tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
+    return render_template("stockData.html",stockMajorOwnership=stockMajorOwnership,stockPortfolioManagerActivity=stockPortfolioManagerActivity,tickerTASignals=tickerTASignals,tickerTA=tickerTA,stockSECFilings=stockSECFilings,stockETF=stockETF,dcfTool=dcfTool,allStocks=allStocks,fiftyTwoWeekHighLowChange=fiftyTwoWeekHighLowChange,percentChange=percentChange,dcf=dcf,ema=ema,smaDeviation=smaDeviation)
 
 ###############################################
 #          Render Fundamentals page           #

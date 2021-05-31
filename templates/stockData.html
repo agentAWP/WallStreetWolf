@@ -182,7 +182,14 @@
 
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
-      <p><b><u>Recent Portfolio Manager Activity</u></b></p>
+      <p><b><u>Major Stock Ownership</u></b></p>
+      {% for activity in stockMajorOwnership %}
+            <p>{{stockMajorOwnership[activity].to_html() | safe}} </p>
+      {%endfor%}
+
+      <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+
+       <p><b><u>Recent Portfolio Manager Activity</u></b></p>
       {% for activity in stockPortfolioManagerActivity %}
             <p>{{stockPortfolioManagerActivity[activity].to_html() | safe}} </p>
       {%endfor%}
