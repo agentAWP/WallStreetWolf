@@ -772,6 +772,7 @@ def filingsSEC(ticker):
 
 #From StockTA.com
 def techAnalysis(ticker):
+    ticker = ticker.replace("-",".")
     techAnalysisMetrics = {}
     url = "http://www.stockta.com/cgi-bin/analysis.pl?symb=" + ticker  +"&cobrand=&mode=stock"
     a = pd.read_html(url)
@@ -849,6 +850,7 @@ def techAnalysis(ticker):
 
 #From financhill.com
 def techSignals(ticker):
+    ticker = ticker.replace("-",".")
     signalsTech = {}
     try:
         url = "https://financhill.com/stock-price-chart/" + ticker +"-technical-analysis"
@@ -881,6 +883,7 @@ def techSignals(ticker):
 
 #Returns Major Recent Stock Activity from Super Investors (Dataroma.com)
 def stockOwnership(ticker):
+    ticker = ticker.replace("-",".")
     try:
         tickerOwnershipURL = "https://www.dataroma.com/m/stock.php?sym="+ ticker
         tickerOwnership = pd.read_html(tickerOwnershipURL)[2]
@@ -891,6 +894,7 @@ def stockOwnership(ticker):
         x = {'ERROR':  ['No Data Found in Dataroma.com']}
         return pd.DataFrame(x)
 def recentStockActivity(ticker):
+    ticker = ticker.replace("-",".")
     try:
         recentActivityURL = "https://www.dataroma.com/m/activity.php?sym="+ ticker + "&typ=a"
         recentActivity = pd.read_html(recentActivityURL)[1]
