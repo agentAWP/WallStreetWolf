@@ -953,7 +953,6 @@ def stockData():
         tickerTASignals[x] = techSignals(x)
         stockPortfolioManagerActivity[x] = recentStockActivity(x)
         stockMajorOwnership[x] = stockOwnership(x)
-    print (stockPortfolioManagerActivity)
     for stock in allStocks:
         ticker = allStocks[stock]
         a = {}
