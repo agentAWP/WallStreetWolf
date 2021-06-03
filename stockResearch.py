@@ -769,7 +769,6 @@ def filingsSEC(ticker):
             secFilings[stock] = "No SEC filings found"
     return secFilings
 
-
 #From StockTA.com
 def techAnalysis(ticker):
     ticker = ticker.replace("-",".")
@@ -906,6 +905,53 @@ def recentStockActivity(ticker):
         x = {'ERROR':  ['No Data Found in Dataroma.com']}
         return pd.DataFrame(x)
 
+
+#CryptoMarket -- Data from CoingGecko API
+def cryptoData():
+    r = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+    cryptoMarket = r.json()
+    cryptoTickers = {}
+    for x in cryptoMarket:
+        if x["symbol"] in [
+            "btc", 
+            "eth",
+            "bnb",
+            "usdt",
+            "ada",
+            "doge",
+            "xrp",
+            "dot",
+            "usdc",
+            "icp",
+            "uni",
+            "link",
+            "bch",
+            "ltc",
+            "matic",
+            "sol",
+            "xlm",
+            "theta",
+            "busd",
+            "vet"
+        ]:
+            cryptoTickers[x["symbol"]] = {
+                "Market Cap Rank"           : x["market_cap_rank"],
+                "Current Price"             : x["current_price"],
+                "Market Cap"                : x["market_cap"],
+                "All Time High"             : x["ath"],
+                "24H High"                  : x["high_24h"],
+                "24H Low"                   : x["low_24h"],
+                "24H Market Cap Change %"   : x["market_cap_change_percentage_24h"],
+                "All Time High Change %"    : x["ath_change_percentage"],
+                "24H Price Change %"        : x["price_change_percentage_24h"]
+                }
+    cryptoTable = pd.DataFrame.from_dict(cryptoTickers,orient="index")
+    cryptoTable = cryptoTable.reset_index()
+    cryptoTable = cryptoTable.set_index(cryptoTable.columns[1])
+    cryptoTable = cryptoTable.rename(columns = {"index":"Ticker"})
+    return cryptoTable
+
+
 # print ("------------------------------------------------------------------------------------")
 
 
@@ -920,7 +966,8 @@ topbar = Navbar(
                 View('Markets', 'markets'),
                 View('S&P500 Sector Holdings', 'sectorTopTenHoldings'),
                 View('Company Financial Comparison', 'companyFinancialsComparison'),
-                View('FinViz Stock Screener', 'finVizStockScreen')
+                View('FinViz Stock Screener', 'finVizStockScreen'),
+                View('CryptoCurrencies',"cryptoHoldings")
                 )
 
 # registers the "top" menubar
@@ -1127,6 +1174,16 @@ def finVizStockScreenerResult():
     tickers = [x.upper() for x in inputs]
     stockScreenResults = finVizStockScreener(tickers)
     return render_template("finVizStockScreenResult.html",stockScreenResults=stockScreenResults)
+
+###############################################
+#    Render CryptoMarketData #
+###############################################
+@app.route("/cryptoHoldings/",methods = ["GET"])
+def cryptoHoldings():
+    cryptosByMarketCap = cryptoData()
+    return render_template("cryptoHoldings.html",cryptosByMarketCap=cryptosByMarketCap)
+
+
 
 ###############################################
 #             Init our app                    #
