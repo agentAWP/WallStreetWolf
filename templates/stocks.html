@@ -7,6 +7,7 @@
    <body>
       {% extends "index.html" %}
       {% block content %}
+      {{super()}}
       <h1>Enter Ticker</h1>
       <form action="/stockData/" method = "POST">
         <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p>

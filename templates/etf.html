@@ -7,6 +7,7 @@
    <body>
       {% extends "index.html" %}
       {% block content %}
+      {{ super() }}
       <h1>Enter ETF</h1>
       <form action="/etfResult/" method = "POST">
         <p>ETF <input type = "text" name = "symbol" placeholder="Enter symbol"></p>

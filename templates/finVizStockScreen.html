@@ -24,6 +24,7 @@
    <body>
       {% extends "index.html" %}
       {% block content %}
+      {{ super() }}
       <h1>Enter upto 20 Tickers</h1>
       <form action='/finVizStockScreenerResult/' method="post">
         <div id="wrapper">

@@ -14,9 +14,9 @@
 
 .row {
 
-  margin-left:-5px;
+  margin-left:5px;
 
-  margin-right:-5px;
+  margin-right:5px;
 
 }
 .column {
@@ -66,15 +66,16 @@ tr:nth-child(even) {
 <body>
   {% extends "index.html" %}
   {% block content %}
+  {{ super() }}
   <h1>Fundamental Analysis of Stocks</h1>
   <div class="row">
     {% for x in finRatios %}
-      <div class="column">
-        <h3 style="text-align:left">Stock Fundamentals for {{x}}</h3>
+      <div style="padding: 25px" class="column">
+        <h2>Stock Fundamentals for {{x}}</h2>
           <table>
             <tr>
-              <th>METRIC</th>
-              <th>VALUE</th>
+              <th>  METRIC  </th>
+              <th>  VALUE   </th>
             </tr>
             {%for k,v in finRatios[x].items()%}
             <tr>
@@ -89,10 +90,6 @@ tr:nth-child(even) {
   <p></p>
   <p></p>
   <p></p>
-  <!-- table{
-  width:49%;
-  float:left;
-} -->
 
   {% for x in yahooFunda %}
     {% if "error" not in yahooFunda[x] %}
@@ -101,35 +98,39 @@ tr:nth-child(even) {
     {% else %}
       <h1>{{x}} : {{yahooFunda[x]["error"]}}</h1>
     {% endif %}
-    <!-- <hr style="border: 3px dotted #0099CC" color="#000000" size="4"> -->
+
+
   {% endfor %}
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+  
   <div class="row">
     {% for x in yahooFunda %}
-      <div class="column">
+      <div style="padding: 20px" class="column">
         {% if "error" not in yahooFunda[x] %}
-          <h1>{{x}} Stock Price History</h1>
-          {{yahooFunda[x]["StockPriceHistory"].to_html() | safe}}
+          <h1>  {{x}} Stock Price History</h1>
+          <p>{{yahooFunda[x]["StockPriceHistory"].to_html() | safe}}</p>
         {% else %}
-          <h1>{{x}} : {{yahooFunda[x]["error"]}}</h1>
+          <h1>  {{x}} : {{yahooFunda[x]["error"]}}</h1>
         {% endif %}
       </div>
     {%endfor%}
   </div>
+
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+  
   <h1 style="text-align:left">Company Financials</h1>
   <p></p>
   {% for x in stockStatements %}
-      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Income Statement: {{x}} </h2>
+      <h2> Income Statement: {{x}} </h2>
         {{stockStatements[x]["incomeStatement"].to_html() | safe }}
       <p></p>
-      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Balance Sheet: {{x}} </h2>
+      <h2> Balance Sheet: {{x}} </h2>
         {{stockStatements[x]["balanceSheet"].to_html() | safe }}
       <p></p>
-      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Cash Flow Sheet: {{x}} </h2>
+      <h2> Cash Flow Sheet: {{x}} </h2>
         {{stockStatements[x]["cashFlowStatement"].to_html() | safe }}
       <p></p>
-      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Company Ratios: {{x}} </h2>
+      <h2> Company Ratios: {{x}} </h2>
         {{stockStatements[x]["companyRatios"].to_html() | safe }}
       <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
   {% endfor %}

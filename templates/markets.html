@@ -23,6 +23,7 @@
    <body>
       {% extends "index.html" %}
       {% block content %}
+      {{ super() }}
       <h1>Enter one or more market symbols</h1>
       <form action="/marketData/" method = "POST">
         <!-- <p>Ticker <input type = "text" name = "symbol" placeholder="Enter symbol"></p> -->

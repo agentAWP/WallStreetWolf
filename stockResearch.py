@@ -779,26 +779,26 @@ def techAnalysis(ticker):
     dailyData = dailyData.set_index(dailyData.columns[0]) 
     dailyData = dailyData.drop(labels="Symbol",axis=0)
     dailyData = dailyData.rename(columns={1:"Last Trade",2:"Date",3:"Percent Change",4:"Open",5:"High",6:"Low",7:"Volume"})
-    dailyData.index.names = [""]
+    dailyData.index.names = ["Daily Data"]
     techAnalysisMetrics["dailyData"] = ["Daily Price Movement for " + ticker,dailyData]
     overallAnalysis = a[6]
     overallAnalysis = overallAnalysis.drop(labels=0,axis=0)
     overallAnalysis = overallAnalysis.set_index(overallAnalysis.columns[0])
     overallAnalysis = overallAnalysis.rename(columns={1:"Overall",2:"Short Term (30D)",3:"Intermediate Term (60D)",4:"Long Term (120D)"})
-    overallAnalysis.index.names = [""]
+    overallAnalysis.index.names = ["Overall Analysis"]
     techAnalysisMetrics["overallAnalysis"] = ["Quick Overview.",overallAnalysis]
     supportResistanceAnalysis = a[9]
     supportResistanceAnalysis = supportResistanceAnalysis.set_index(supportResistanceAnalysis.columns[0])
     supportResistanceAnalysis = supportResistanceAnalysis.drop(labels="Type",axis=0)
     supportResistanceAnalysis = supportResistanceAnalysis.rename(columns={1:"Value",2:"Confluence"})
     supportResistanceAnalysis = supportResistanceAnalysis.drop(labels="Confluence",axis=1)
-    supportResistanceAnalysis.index.names = ["Type"]
+    supportResistanceAnalysis.index.names = ["Support and Resistance Price Points"]
     techAnalysisMetrics["supportResistanceAnalysis"] = ["Technical analysts use support and resistance levels to identify price points on a chart where the probabilities favor a pause or reversal of a prevailing trend.\nSupport occurs where a downtrend is expected to pause due to a concentration of demand.\nResistance occurs where an uptrend is expected to pause temporarily, due to a concentration of supply.\nConfluence refers to the strength of the support/resistance level.",supportResistanceAnalysis]
     chartIndicators = a[11]
     chartIndicators = chartIndicators.set_index(chartIndicators.columns[0])
     chartIndicators = chartIndicators.drop(labels="Ind.",axis=0)
     chartIndicators = chartIndicators.rename(columns={1:"Short Term (30D)",2:"Intermediate Term (60D)",3:"Long Term (120D)"})
-    chartIndicators.index.names = ["Indicator"]
+    chartIndicators.index.names = ["Technical Indicators"]
     techAnalysisMetrics["chartIndicators"] = ["Quick Snapshot of Technical Indicators.\nBu=Bullish N=Neutral, Be=Bearish.",chartIndicators]
     techMetrics = ["fib","macd","ema","rsi","tdd","stoch"]
     for x in techMetrics:
@@ -808,6 +808,7 @@ def techAnalysis(ticker):
             fib = fib.rename(columns={0:"TimeFrame",1:"Trend",2:"38.2%",3:"50%",4:"61.8%"})
             fib = fib.set_index(fib.columns[0])
             fib = fib.drop(["Time Frame"],axis=0)
+            fib.index.names = ["Fibonacci"]
             techAnalysisMetrics["fib"] = ["Fibonacci analysis evaluates the short term (30 days) intermediate term (60 days) and long term trends (120 days) and retracements.\nStocks that retrace 38.2% or less of a trend will usually continue the trend.\nRetracements exceeding 61.8% indicate a reversal.",fib]
         if x == "macd":
             macd = pd.read_html(url)[6]
@@ -819,32 +820,37 @@ def techAnalysis(ticker):
             macdTrend = macdTrend.drop(labels=0,axis=0)
             macdTrend = macdTrend.rename(columns={0:"",1:"Short Term (30D)",2:"Intermediate Term (60D)",3:"Long Term (120D)"})
             macdTrend = macdTrend.set_index(macdTrend.columns[0])
+            macdTrend.index.names = ["MACD Trends"]
             techAnalysisMetrics["macdTrend"] = ["Compares the three most recent price high and lows for MACD trends.\nHigher Index Trend > Lower Index Trend is a SELL Signal. Lower Index Trend > Higher Index Trend is a BUY Signal.",macdTrend]
         if x == "ema":
             ema = pd.read_html(url)[6]
             ema = ema.set_index(ema.columns[0])
             ema = ema.rename(columns={1:"5 day EMA",2:"13 day EMA",3:"20 day EMA",4:"50 Day EMA"})
             ema = ema.drop(["Last Trade"],axis=0)
-            ema.index.names = [""]
+            ema.index.names = ["Exponential Moving Averages"]
             techAnalysisMetrics["ema"] = ["The Exponential Moving Average (EMA) is similar to a simple moving average (average price over a set period) but it utilizes a weighting factor that exponentially declines from the most recent data point (recent prices are weighted higher than oid prices).\nThe respective EMA's will give bullish signals when trading above trailing EMA's and below the current price and vice versa.",ema]
         if x == "rsi":
             rsi = pd.read_html(url)[6]
             rsi = rsi.rename(columns={1:"RSI"})
             rsi = rsi.set_index(rsi.columns[0])
-            rsi.index.names = [""]
+            rsi.index.names = ["Relative Strength Index"]
             techAnalysisMetrics["rsi"] = ["The relative strength index (RSI) is a momentum osciallator that is able to measure the velocity and magnitude of stock price changes.\nMomentum is calculated as the ratio of positive price changes to negative price changes.\nThe RSI analysis compares the current RSI against neutral(50), oversold (30) and overbought (70) conditions.",rsi]
         if x == "tdd":
             tdd = pd.read_html(url)[6]
             tdd = tdd.rename(columns={1:"TDD"})
             tdd = tdd.set_index(tdd.columns[0])
-            tdd.index.names = [""]
+            tdd.index.names = ["Three Day Displaced"]
             techAnalysisMetrics["tdd"] = ["The Three Day Displaced (TDD) analysis compares the current price to the three day displaced (TDD) moving averge of the stock.\nThe three day displaced moving average is calculated using the three day average three days ago (or the average price 4,5 and 6 trading sessions ago).\nThe TDD average usually used as a trailling tight stop.\nStocks trading above the TDD are bullish and stocks trading below are considered bearish",tdd]
         if x == "stoch":
             stoch = pd.read_html(url)[6]
             stoch = stoch.rename(columns={1:"Stochastic Score"})
             stoch = stoch.set_index(stoch.columns[0])
-            stoch.index.names = [""]
+            stoch.index.names = ["Stochastic Oscillator"]
             techAnalysisMetrics["stoch"] = ["A stochastic oscillator is a momentum indicator comparing a particular closing price of a security to a range of its prices over a certain period of time.\nTraditionally, readings over 80 are considered in the overbought range, and readings under 20 are considered oversold.",stoch]
+    print ("**********************")
+    for info in techAnalysisMetrics:
+        print (techAnalysisMetrics[info][1].index.name)
+    print ("**********************")
     return techAnalysisMetrics
 
 #From financhill.com
@@ -965,7 +971,7 @@ topbar = Navbar(
                 View('ETFs', 'etf'),
                 View('Markets', 'markets'),
                 View('S&P500 Sector Holdings', 'sectorTopTenHoldings'),
-                View('Company Financial Comparison', 'companyFinancialsComparison'),
+                View('Company Financials', 'companyFinancialsComparison'),
                 View('FinViz Stock Screener', 'finVizStockScreen'),
                 View('CryptoCurrencies',"cryptoHoldings")
                 )

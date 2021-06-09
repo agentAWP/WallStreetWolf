@@ -65,11 +65,12 @@ tr:nth-child(even) {
 <body>
   {% extends "index.html" %}
   {% block content %}
+  {{ super() }}
   <h1 style="text-align:left">Top 10 HODLings of S&P500 sectors</h1>
   <p></p>
   {% for x in allSectorsHoldingsByWeights %}
     <div class="column">
-      <h2 style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Sector: {{x}} </h2>
+      <h2> Sector: {{x}} </h2>
         {{allSectorsHoldingsByWeights[x].to_html() | safe }}
     </div>
   {% endfor %}
@@ -77,3 +78,4 @@ tr:nth-child(even) {
 </body>
 </html>
 <!-- <div style="padding:10px; display:inline-block;"> -->
+<!-- style="text-align:left; font-size: 1.5em; color: DodgerBlue"> Sector: {{x}} </h2> -->

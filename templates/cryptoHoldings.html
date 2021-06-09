@@ -65,6 +65,7 @@ tr:nth-child(even) {
 <body>
   {% extends "index.html" %}
   {% block content %}
+  {{ super() }}
   <h1 style="text-align:left">Top 20 Crypto HODLings</h1>
   <p>{{cryptosByMarketCap.to_html() | safe }}</p>
   {% endblock %}
