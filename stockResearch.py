@@ -815,6 +815,7 @@ def techAnalysis(ticker):
             macd = macd.drop(labels=0,axis=0)
             macd = macd.rename(columns={0:"",1:"Fast MACD",2:"Slow MACD",3:"Slow v/s Fast"})
             macd = macd.set_index(macd.columns[0])
+            macd.index.names = ["MACD"]
             techAnalysisMetrics["macd"] = ["The MACD analysis compares the MACD to the signal MACD line and their relationship to zero for any stock or commodity.\nThe MACD is calculated by subtracting the 26 day[slow MACD] expotential moving average (EMA) from the 12 day EMA [fast MACD].\nNegative MACD is SELL Signal. Positive MACD is BUY Signal.",macd]
             macdTrend = pd.read_html(url)[7]
             macdTrend = macdTrend.drop(labels=0,axis=0)
