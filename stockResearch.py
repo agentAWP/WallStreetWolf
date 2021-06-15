@@ -974,7 +974,8 @@ topbar = Navbar(
                 View('S&P500 Sector Holdings', 'sectorTopTenHoldings'),
                 View('Company Financials', 'companyFinancialsComparison'),
                 View('FinViz Stock Screener', 'finVizStockScreen'),
-                View('CryptoCurrencies',"cryptoHoldings")
+                View('CryptoCurrencies',"cryptoHoldings"),
+                View("Value Investing Metrics and Ratios","valueinvesting")
                 )
 
 # registers the "top" menubar
@@ -1190,7 +1191,9 @@ def cryptoHoldings():
     cryptosByMarketCap = cryptoData()
     return render_template("cryptoHoldings.html",cryptosByMarketCap=cryptosByMarketCap)
 
-
+@app.route("/valueinvesting/",methods = ["GET"])
+def valueinvesting():
+    return render_template("The Complete Value Investing Cheat Sheet.html")
 
 ###############################################
 #             Init our app                    #
