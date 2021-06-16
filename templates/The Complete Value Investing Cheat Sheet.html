@@ -5,193 +5,184 @@
                         text-decoration: underline;
                         font-weight: bold;
                     }
-        h1  {
-                color:royalblue
-            }
-        h2  {
-                color:indigo
-            }
-        h3  {
-                color:darkorange
-            }
-
-
     </style>
     <body>
+        {% extends "index.html" %}
+        {% block content %}
+            <h1 style="color:royalblue">The Complete Value Investing Cheat Sheet</h1>
 
-        <h1>The Complete Value Investing Cheat Sheet</h1>
+            <h2 style="color:indigo">Value Investing Metrics and Ratios</h2>
+            Keep in mind these are guidelines, so you may not find a company that fits all of the criteria below. You should also compare these metrics to competitors or similar companies within the same industry. 
+            This article breaks down what to look for with some detail. Additionally, there is a simplified checklist near the bottom of the post for fast and easy analysis. 
 
-        <h2>Value Investing Metrics and Ratios</h2>
-        Keep in mind these are guidelines, so you may not find a company that fits all of the criteria below. You should also compare these metrics to competitors or similar companies within the same industry. 
-        This article breaks down what to look for with some detail. Additionally, there is a simplified checklist near the bottom of the post for fast and easy analysis. 
+            <h3 style="color:darkorange">Valuation Analysis</h3>
+            <p>Determining the present and future value of a company is the name of the game. These are some of the metrics commonly used to determine the value of the business. </p>
 
-        <h3>Valuation Analysis</h3>
-        <p>Determining the present and future value of a company is the name of the game. These are some of the metrics commonly used to determine the value of the business. </p>
+            <h3 style="color:darkorange">Market Capitalization</h3>
+            <p>Market cap is the total market value of the company’s outstanding shares. You should compare the market cap with other similar businesses within the same industry. A business with a low market capitalization compared to its peers is a good sign, but you must look into other financial figures. </p>
 
-        <h3>Market Capitalization</h3>
-        <p>Market cap is the total market value of the company’s outstanding shares. You should compare the market cap with other similar businesses within the same industry. A business with a low market capitalization compared to its peers is a good sign, but you must look into other financial figures. </p>
+            <h3 style="color:darkorange">EV/EBITDA Ratio</h3>
+            <p>
+                Enterprise Value (EV) is similar to a company’s market capitalization but includes the company’s debt and cash supply. It is calculated by adding the long and short-term debt to the market cap and deducting its cash and cash equivalents. 
+                Earnings before interest, taxes, depreciation, and amortization (EBITDA) is a handy way to determine a company’s general financial standing and profitability. 
+                Dividing the enterprise value by the company’s EBITDA paints a strong picture of the overall valuation. An EV/EBITDA under 10 is healthy and often a sign that the company is undervalued. 
+            </p>
 
-        <h3>EV/EBITDA Ratio</h3>
-        <p>
-            Enterprise Value (EV) is similar to a company’s market capitalization but includes the company’s debt and cash supply. It is calculated by adding the long and short-term debt to the market cap and deducting its cash and cash equivalents. 
-            Earnings before interest, taxes, depreciation, and amortization (EBITDA) is a handy way to determine a company’s general financial standing and profitability. 
-            Dividing the enterprise value by the company’s EBITDA paints a strong picture of the overall valuation. An EV/EBITDA under 10 is healthy and often a sign that the company is undervalued. 
-        </p>
+            <h3 style="color:darkorange">Price-to-Book Ratio P/B</h3>
+            <p>
+                The price-to-book ratio takes the company’s book value and divides it by the current market price per share of stock. Book value is simply the company’s total assets minus its total liabilities.
+                A P/B ratio under 1 is considered undervalued because the share price is lower than the value of the company’s tangible assets. 
+            </p>
 
-        <h3>Price-to-Book Ratio P/B</h3>
-        <p>
-            The price-to-book ratio takes the company’s book value and divides it by the current market price per share of stock. Book value is simply the company’s total assets minus its total liabilities.
-            A P/B ratio under 1 is considered undervalued because the share price is lower than the value of the company’s tangible assets. 
-        </p>
+            <h3 style="color:darkorange" style="color:darkorange">Price-to-Earnings Ratio P/E</h3>
+            <p>
+                The price-to-earnings ratio is calculated by taking the company’s share price and dividing it by the earnings per share. For example, if you are buying a company with a P/E ratio of 15, you are paying $15 for every dollar of the company’s earnings.
+                Generally, a P/E of 10 and under is considered undervalued. The historical average of the S&P 500 P/E ratio is about 15.
+            </p>
 
-        <h3>Price-to-Earnings Ratio P/E</h3>
-        <p>
-            The price-to-earnings ratio is calculated by taking the company’s share price and dividing it by the earnings per share. For example, if you are buying a company with a P/E ratio of 15, you are paying $15 for every dollar of the company’s earnings.
-            Generally, a P/E of 10 and under is considered undervalued. The historical average of the S&P 500 P/E ratio is about 15.
-        </p>
+            <h3 style="color:darkorange">Price-to-Free Cash Flow P/FCF</h3>
+            <p>
+                Price-to-free cash flow takes a company’s per-share market price and compares it to its free cash flow. It’s calculated by taking the market capitalization and dividing it by the free cash flow of the business. 
+                Free cash flow is all the cash available that can be used to pay dividends, repurchase shares, pay creditors, and more. FCF is net income adjusted by non-cash expenses and changes in working capital. 
+                The lower the P/FCF, the more undervalued the company. Generally, a P/FCF of under 5 is considered good because the price is less than 5 times the free cash flow per share. 
+            </p>
 
-        <h3>Price-to-Free Cash Flow P/FCF</h3>
-        <p>
-            Price-to-free cash flow takes a company’s per-share market price and compares it to its free cash flow. It’s calculated by taking the market capitalization and dividing it by the free cash flow of the business. 
-            Free cash flow is all the cash available that can be used to pay dividends, repurchase shares, pay creditors, and more. FCF is net income adjusted by non-cash expenses and changes in working capital. 
-            The lower the P/FCF, the more undervalued the company. Generally, a P/FCF of under 5 is considered good because the price is less than 5 times the free cash flow per share. 
-        </p>
+            <h2 style="color:indigo">Debt Analysis</h2>
 
-        <h2>Debt Analysis</h2>
+            <h3 style="color:darkorange">Quick Ratio</h3>
+            <p>
+                The quick ratio, also known as the acid-test, measures the company’s ability to pay its most current liabilities without having to sell assets or acquire additional financing. The quick ratio is a strict way of determining liquidity because it only figures in the company’s cash and most liquid assets.
+                A ratio above 1 means the company should have no issue paying its current liabilities. The higher the number, the better. Below 1 can indicate the company is in financial distress and may have a hard time staying solvent without additional asset sales or financing. 
+            </p>
 
-        <h3>Quick Ratio</h3>
-        <p>
-            The quick ratio, also known as the acid-test, measures the company’s ability to pay its most current liabilities without having to sell assets or acquire additional financing. The quick ratio is a strict way of determining liquidity because it only figures in the company’s cash and most liquid assets.
-            A ratio above 1 means the company should have no issue paying its current liabilities. The higher the number, the better. Below 1 can indicate the company is in financial distress and may have a hard time staying solvent without additional asset sales or financing. 
-        </p>
+            <h3 style="color:darkorange">Current Ratio</h3>
+            <p>
+                The current ratio is a less harsh determination of liquidity than the quick ratio. It includes assets that can be turned into cash within a year or less, along with cash and cash equivalents. A ratio above 1 is average and means there is no issue for a company to meet its current debt obligations.
+            </p>
 
-        <h3>Current Ratio</h3>
-        <p>
-            The current ratio is a less harsh determination of liquidity than the quick ratio. It includes assets that can be turned into cash within a year or less, along with cash and cash equivalents. A ratio above 1 is average and means there is no issue for a company to meet its current debt obligations.
-        </p>
+            <h3 style="color:darkorange">Debt-to-Equity Ratio D/E</h3>
+            <p>
+                The debt-to-equity ratio determines if a company is financing its operations using debt or with its own funds. It is calculated by taking a company’s total liabilities and dividing them by the total shareholders’ equity. 
+                Shareholder equity, also known as book value, is what’s left for investors after subtracting the company’s total liabilities from its total assets.
+                In general, it is ideal for the debt-to-equity ratio to be below 2. It can be expected in some industries to have a much higher D/E ratio. 
 
-        <h3>Debt-to-Equity Ratio D/E</h3>
-        <p>
-            The debt-to-equity ratio determines if a company is financing its operations using debt or with its own funds. It is calculated by taking a company’s total liabilities and dividing them by the total shareholders’ equity. 
-            Shareholder equity, also known as book value, is what’s left for investors after subtracting the company’s total liabilities from its total assets.
-            In general, it is ideal for the debt-to-equity ratio to be below 2. It can be expected in some industries to have a much higher D/E ratio. 
+            </p>
 
-        </p>
+            <h3 style="color:darkorange">Interest Coverage Ratio</h3>
+            <p>
+                The interest coverage ratio measures the company’s ability to pay the interest on its outstanding debt. It’s also known as the times interest earned ratio (TIE). To calculate the TIE, you take the company’s earnings before interest and taxes (EBIT) and divide it by its interest expense.
+                The higher the TIE ratio, the better. It shows the company has no issue paying its financing interest expense. Overall, it is best to have an interest coverage ratio above 1.5. Anything below this figure is a red flag that the company is or will be facing financial hardship.  A business that can only pay its interest obligations are known as zombie companies.
+            </p>
 
-        <h3>Interest Coverage Ratio</h3>
-        <p>
-            The interest coverage ratio measures the company’s ability to pay the interest on its outstanding debt. It’s also known as the times interest earned ratio (TIE). To calculate the TIE, you take the company’s earnings before interest and taxes (EBIT) and divide it by its interest expense.
-            The higher the TIE ratio, the better. It shows the company has no issue paying its financing interest expense. Overall, it is best to have an interest coverage ratio above 1.5. Anything below this figure is a red flag that the company is or will be facing financial hardship.  A business that can only pay its interest obligations are known as zombie companies.
-        </p>
+            <h2 style="color:indigo">Income Analysis</h2>
+            <p>
+                Profitably is crucial, and analyzing overall income tells you how much money is coming in and from where. 
+            </p>
 
-        <h2>Income Analysis</h2>
-        <p>
-            Profitably is crucial, and analyzing overall income tells you how much money is coming in and from where. 
-        </p>
+            <h3 style="color:darkorange">Revenue</h3>
+            <p>
+                Revenue or sales is the total amount of money coming in. Revenue from business operations is most important, but it can also come from financing and investing activities.  
+            </p>
 
-        <h3>Revenue</h3>
-        <p>
-            Revenue or sales is the total amount of money coming in. Revenue from business operations is most important, but it can also come from financing and investing activities.  
-        </p>
+            <h3 style="color:darkorange">Operating Revenue</h3>
+            <p>
+                This is income generated by the primary operations of the business. You should evaluate the company’s cash flow statement and look for increasing operating revenue. It is a good sign that the business model is profitable and growing. 
+            </p>
 
-        <h3>Operating Revenue</h3>
-        <p>
-            This is income generated by the primary operations of the business. You should evaluate the company’s cash flow statement and look for increasing operating revenue. It is a good sign that the business model is profitable and growing. 
-        </p>
+            <h3 style="color:darkorange">Net Income</h3>
+            <p>
+                Net income is the revenue of the company minus all the costs of doing business. Finding undervalued companies that have a positive net income is ideal. Compare the company’s NI with its competitors to get a feel of how it is performing. 
+            </p>
 
-        <h3>Net Income</h3>
-        <p>
-            Net income is the revenue of the company minus all the costs of doing business. Finding undervalued companies that have a positive net income is ideal. Compare the company’s NI with its competitors to get a feel of how it is performing. 
-        </p>
+            <h3 style="color:darkorange">Profit Margin</h3>
+            <p>
+                Look at the company’s gross and net profit margin to gauge the percentage of sales that result in profits. A net profit margin of 20% or higher is excellent, while a net profit margin of 10% is good. The business model and industry can significantly affect profit margins. 
+            </p>
 
-        <h3>Profit Margin</h3>
-        <p>
-            Look at the company’s gross and net profit margin to gauge the percentage of sales that result in profits. A net profit margin of 20% or higher is excellent, while a net profit margin of 10% is good. The business model and industry can significantly affect profit margins. 
-        </p>
-
-        <h3>Earnings-Per-Share EPS</h3>
-        <p>
-            Earnings-per-share takes the company’s profits and divides them by the outstanding shares of its common stock. EPS tells you how much money the business is making for each share of its stock. 
-            Investors will pay more for companies with a positive EPS. You should look for stocks that show growth in their EPS or find a reason to believe it’s earnings will increase. 
-        </p>
-
-
-        <h2>Growth Analysis</h2>
-        <p>
-            Growth is important in value investing despite what you may hear. Growth investors will happily overpay for a company with high growth forecasts. This is not the case for most value investors. 
-            Instead, look to underpay for companies with steady growth or companies with high potential to rebound from periods of low growth. 
-        </p>
-
-        <h3>Price-to-Earnings-to-Growth PEG Ratio</h3>
-        <p>
-            The price/earnings to growth ratio takes the company’s P/E ratio and divides it by the expected growth rate of its earnings. 
-            Like the P/E ratio, the PEG ratio determines the value of a stock but accounts for future earnings growth. A low PEG ratio tells you a company is potentially undervalued and has a higher growth rate. 
-            PEG ratios over 1 are typically a sign that the company could be overvalued. When value investing, it is optimal for the company to have a PEG ratio below 1. 
-        </p>
+            <h3 style="color:darkorange">Earnings-Per-Share EPS</h3>
+            <p>
+                Earnings-per-share takes the company’s profits and divides them by the outstanding shares of its common stock. EPS tells you how much money the business is making for each share of its stock. 
+                Investors will pay more for companies with a positive EPS. You should look for stocks that show growth in their EPS or find a reason to believe it’s earnings will increase. 
+            </p>
 
 
-        <h3>Dividend Yield and Growth</h3>
-        <p>
-            Most value investors favor dividend-paying stocks. A value stock that pays a good dividend rewards the investor for waiting while the market discovers the real value of the share price. 
-            Whether the company pays a dividend or not shouldn’t persuade you one way or another when looking for value stocks. If the company does pay a nice dividend (4%+) and shows stable dividend growth, consider it icing on the cake. 
-        </p>
+            <h2 style="color:indigo">Growth Analysis</h2>
+            <p>
+                Growth is important in value investing despite what you may hear. Growth investors will happily overpay for a company with high growth forecasts. This is not the case for most value investors. 
+                Instead, look to underpay for companies with steady growth or companies with high potential to rebound from periods of low growth. 
+            </p>
 
-        <h3>EPS Growth</h3>
-        <p>
-            We have gone over earnings-per-share and how a positive EPS is ideal. A negative EPS indicates the company is losing money, and you will need to research why and how long that may continue. 
-            EPS growth should be consistent and in an uptrend. If it isn’t, the company could have declining sales that may further decrease the share price. 
-            Negative or decreasing EPS does not mean the stock is a lousy value play. Companies can go through hardships and come out much stronger and reward patient investors. 
-        </p>
+            <h3 style="color:darkorange">Price-to-Earnings-to-Growth PEG Ratio</h3>
+            <p>
+                The price/earnings to growth ratio takes the company’s P/E ratio and divides it by the expected growth rate of its earnings. 
+                Like the P/E ratio, the PEG ratio determines the value of a stock but accounts for future earnings growth. A low PEG ratio tells you a company is potentially undervalued and has a higher growth rate. 
+                PEG ratios over 1 are typically a sign that the company could be overvalued. When value investing, it is optimal for the company to have a PEG ratio below 1. 
+            </p>
 
-        <h3>Increasing Return on Equity ROE</h3>
-        <p>
-            Return on equity calculates the company’s net income by its shareholders’ equity or book value. It tells investors how well the profitability of the business is performing compared to its book value. 
-            Generally, a ROE of under 10% is considered under the average or poor. An ROE of 15-20%+ tells investors the business is increasing its profits without needing to heavily raise capital. 
-            Stable ROE growth is a vital factor to consider. 
-        </p>
 
-        <h3>Increasing Return on Assets ROA</h3>
-        <p>
-            Return on assets calculates the company’s net income by its total assets. This shows you how well the company is generating profit in relation to its assets. 
-            High ROA is anything above 20%, while 5% is considered good/average. If the business has a high ROA, it is proficient at converting its investments into profits. 
-        </p>
+            <h3 style="color:darkorange">Dividend Yield and Growth</h3>
+            <p>
+                Most value investors favor dividend-paying stocks. A value stock that pays a good dividend rewards the investor for waiting while the market discovers the real value of the share price. 
+                Whether the company pays a dividend or not shouldn’t persuade you one way or another when looking for value stocks. If the company does pay a nice dividend (4%+) and shows stable dividend growth, consider it icing on the cake. 
+            </p>
 
-        <h2>Additional Metrics</h2>
-        <p>
-            There are other factors to consider when looking for good value stocks. Some elements of value investing can be more complex than taking ratios and comparing them to a corporation’s competitors.
-            Researching the industry and business model will help you identify why the company is undervalued and if it’s a worthwhile long-term or short-term investment. 
-        </p>
+            <h3 style="color:darkorange">EPS Growth</h3>
+            <p>
+                We have gone over earnings-per-share and how a positive EPS is ideal. A negative EPS indicates the company is losing money, and you will need to research why and how long that may continue. 
+                EPS growth should be consistent and in an uptrend. If it isn’t, the company could have declining sales that may further decrease the share price. 
+                Negative or decreasing EPS does not mean the stock is a lousy value play. Companies can go through hardships and come out much stronger and reward patient investors. 
+            </p>
 
-        <h3>Economic Moat or Competitive Advantage</h3>
-        <p>
-            Investing in companies that have a strong advantage over its competitors reduces risk and increases returns. The economic moat should, at the very least, exist. The wider the moat or the more robust the competitive advantage, the better. 
-        </p>
+            <h3 style="color:darkorange">Increasing Return on Equity ROE</h3>
+            <p>
+                Return on equity calculates the company’s net income by its shareholders’ equity or book value. It tells investors how well the profitability of the business is performing compared to its book value. 
+                Generally, a ROE of under 10% is considered under the average or poor. An ROE of 15-20%+ tells investors the business is increasing its profits without needing to heavily raise capital. 
+                Stable ROE growth is a vital factor to consider. 
+            </p>
 
-        <h3>Margin of Safety</h3>
-        <p>
-            You may want to figure out the “margin of safety,” which is a Benjamin Graham principle used by many value investors including Warren Buffett.
-            Simply put, using a margin of safety is purchasing a stock well below its intrinsic value or your target price. The margin of safety helps protect you in case your estimates of fair value are incorrect. 
-        </p>
+            <h3 style="color:darkorange">Increasing Return on Assets ROA</h3>
+            <p>
+                Return on assets calculates the company’s net income by its total assets. This shows you how well the company is generating profit in relation to its assets. 
+                High ROA is anything above 20%, while 5% is considered good/average. If the business has a high ROA, it is proficient at converting its investments into profits. 
+            </p>
 
-        <h2>Simplified Value Investing Cheat Sheet</h2>
-        <p>
-            This cheat sheet slims it down for fast analysis and can be used to find value plays in conjunction with a stock screener.
-            Again, these metrics are guidelines and should be compared to similar companies to get optimal results. 
-        </p>
+            <h2 style="color:indigo">Additional Metrics</h2>
+            <p>
+                There are other factors to consider when looking for good value stocks. Some elements of value investing can be more complex than taking ratios and comparing them to a corporation’s competitors.
+                Researching the industry and business model will help you identify why the company is undervalued and if it’s a worthwhile long-term or short-term investment. 
+            </p>
 
-            <ol>
-                <li>EV/EBITDA under 15</li>
-                <li>Price-to-Book P/B ratio under 2</li>
-                <li>Price-to-Free Cash Flow P/FCF under 6</li>
-                <li>Price-to-Earnings Ratio under 15</li>
-                <li>Current Ratio above 1</li>
-                <li>Interest Coverage Ratio above 1.5</li>
-                <li>Net Profit Margin above 5%</li>
-                <li>Price-to-Earnings-to-Growth PEG Ratio under 1</li>
-                <li>Stable EPS Growth</li>
-                <li>Return on Equity ROE over 8% with Stable Growth
-                <li>Return on Assets ROA over 7%</li>
-                <li>Wide Economic Moat</li>
-            </ol>
+            <h3 style="color:darkorange">Economic Moat or Competitive Advantage</h3>
+            <p>
+                Investing in companies that have a strong advantage over its competitors reduces risk and increases returns. The economic moat should, at the very least, exist. The wider the moat or the more robust the competitive advantage, the better. 
+            </p>
+
+            <h3 style="color:darkorange">Margin of Safety</h3>
+            <p>
+                You may want to figure out the “margin of safety,” which is a Benjamin Graham principle used by many value investors including Warren Buffett.
+                Simply put, using a margin of safety is purchasing a stock well below its intrinsic value or your target price. The margin of safety helps protect you in case your estimates of fair value are incorrect. 
+            </p>
+
+            <h2 style="color:indigo">Simplified Value Investing Cheat Sheet</h2>
+            <p>
+                This cheat sheet slims it down for fast analysis and can be used to find value plays in conjunction with a stock screener.
+                Again, these metrics are guidelines and should be compared to similar companies to get optimal results. 
+            </p>
+
+                <ol>
+                    <li>EV/EBITDA under 15</li>
+                    <li>Price-to-Book P/B ratio under 2</li>
+                    <li>Price-to-Free Cash Flow P/FCF under 6</li>
+                    <li>Price-to-Earnings Ratio under 15</li>
+                    <li>Current Ratio above 1</li>
+                    <li>Interest Coverage Ratio above 1.5</li>
+                    <li>Net Profit Margin above 5%</li>
+                    <li>Price-to-Earnings-to-Growth PEG Ratio under 1</li>
+                    <li>Stable EPS Growth</li>
+                    <li>Return on Equity ROE over 8% with Stable Growth
+                    <li>Return on Assets ROA over 7%</li>
+                    <li>Wide Economic Moat</li>
+                </ol>
+        {% endblock %}
     </body>
 </html>
