@@ -958,6 +958,128 @@ def cryptoData():
     cryptoTable = cryptoTable.rename(columns = {"index":"Ticker"})
     return cryptoTable
 
+#All 3 are not used as they are too slow.
+# To be reviewed later
+def CMLVizHighestRevGrowthStocks():
+    url = "https://www.cmlviz.com/inc_home/financial-booms.php?key=106a6c241b8797f52e1e77317b96a201&limit=1000"
+    highestRevenueGrowthStocks = pd.read_html(url)[0]
+    highestRevenueGrowthStocks = highestRevenueGrowthStocks.set_index(highestRevenueGrowthStocks.columns[0])
+    highestRevenueGrowthStocks.columns = ["Stock Price","Price Change and Percent Change"]
+    highestRevenueGrowthStocks.index.name = "Highest Revenue Growth Stocks (Last 8 QTRs)"
+    return highestRevenueGrowthStocks
+def CMLVizUptrendMomentumStocks():
+    url = "https://www.cmlviz.com/inc_home/stacked_MA.php?key=106a6c241b8797f52e1e77317b96a201&limit=1000"
+    hotMomentumStocks = pd.read_html(url)[0]
+    hotMomentumStocks = hotMomentumStocks.set_index(hotMomentumStocks.columns[0])
+    hotMomentumStocks.columns = ["Stock Price","Price Change and Percent Change"]
+    hotMomentumStocks.index.name = "Momentum Stocks in the Market"
+    return hotMomentumStocks
+def CMLVizInvertedMomentumStocks():
+    url = "https://www.cmlviz.com/inc_home/stacked_MA-I.php?key=106a6c241b8797f52e1e77317b96a201&limit=1000"
+    dropMomentumStocks = pd.read_html(url)[0]
+    dropMomentumStocks = dropMomentumStocks.set_index(dropMomentumStocks.columns[0])
+    dropMomentumStocks.columns = ["Stock Price","Price Change and Percent Change"]
+    dropMomentumStocks.index.name = "Momentum Stocks in the Market"
+    return dropMomentumStocks
+
+#Used in the App
+def CMLVizBreakingNews():
+    headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:87.0) Gecko/20100101 Firefox/87.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+                "TE": "Trailers"
+            }
+    url = "https://www.cmlviz.com/inc_home/ticker-lines.php?key=106a6c241b8797f52e1e77317b96a201"
+    r = requests.get(url,headers=headers)
+    breakingStockNews = {}
+    if r.status_code == 200:
+        html = soup(r.text,"lxml")
+        stockCompany = html.find_all("div",class_="name")
+        stockTicker = html.find_all("a",class_="ticker")
+        stockTickerNews = html.find_all("span",class_="text-line")
+        stockPriceChange = html.find_all("span",class_="price-change-amount")
+        stockPercentChange = html.find_all("span",class_="percent_change")
+        for i in range(0,len(stockCompany)):
+            breakingStockNews[stockTicker[i].text] = {
+                                                                "company": stockCompany[i].text,
+                                                                "news": stockTickerNews[i].text,
+                                                                "priceChange": stockPriceChange[i].text,
+                                                                "percentChange": stockPercentChange[i].text
+                                                            }
+    else:
+        breakingStockNews["error"] = "No Data available from CMLViz!"
+
+    return breakingStockNews
+def CMLVizTopMarketCapStocks():
+    headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:87.0) Gecko/20100101 Firefox/87.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "TE": "Trailers"
+        }
+    marketCapStocks = {}
+    url = "https://www.cmlviz.com/get_live_quotes.php?tickers=AAPL,MSFT,AMZN,GOOGL,FB,BRK.A,BRK.B,TSM,TSLA,BABA,V,JPM,NVDA,JNJ,WMT,UNH,MA,BAC,PG,HD,DIS,PYPL,ASML,ADBE,CMCSA,XOM,TM,KO,ORCL,VZ,INTC,CSCO,CRM,PFE,LLY,NVS,CVX,T,NKE,PEP,ABBV,ABT,AVGO,MRK,ACN,WFC,TMO,TMUS,MCD,DHR,TXN,UPS,SAP,COST,MDT,SHOP,UL,PM,C,HON,QCOM,AZN,PDD,LIN,BMY,RY,UNP,NVO,NEE,BA,MS,HDB,AMGN,SNY,RTX,LOW,IBM,BLK,SBUX,AXP,INTU,TTE,CHTR,TD,SCHW,BUD,AMAT,GS,HSBC,SONY,AMT,CAT,GE,MMM,VALE,TGT,DEO,BX,CVS,BHP,EL,RIO,LMT,ZM,SQ,DE,ISRG,SE,GSK,NOW,AMD,SNAP,SYK,SPGI,UBER,BKNG,PLD,BP,JD,ANTM,LRCX,BTI,FIS,ABNB,MU,MDLZ,MO,GM,ZTS,INFY,USB,GILD,CCI,ADP,RDS.A,MRNA,ENB,CI,COP,BNS,PNC,DUK,CNI,TJX,DELL,BAM,CME,FDX,ATVI,TFC,WBK,CB,EQIX,EQNR,CSX,ITW,SHW,SAN,FISV,SNOW,RDS.B,NTES,COF,MELI,MUFG,MMC,BDX,CL,ABB,HCA,NSC,BMO,SO,VMW,CPNG,APD,ILMN,MCO,BBL,STLA,ICE,TEAM,D,EW,ADI,ADSK,BIIB,ECL,IBN,BSX,ABEV,NIO,NOC,VIG,F,TWLO,WM,EMR,ETN,FCX,WDAY,UBS,GPN,AON,REGN,HMC,NXPI,NEM,MET,PUK,PGR,GD,BIDU,CP,TAK,HUM,BNTX,CM,ING,CRWD,KHC,RELX,VOD,DASH,TRP,PSA,SCCO,IDXX,VRTX,COIN,DOCU,RBLX,DOW,KLAC,EOG,DG,PHG,KDP,MNST,ROP,TRI,TWTR,SMFG,ROKU,ALGN,SLB,JCI,SPOT,LYG,WBA,WIT,PLTR,MAR,IQV,NGG,INFO,VEEV,E,EXC,LHX,STZ.B,BCE,TEL,STZ,EBAY,CNQ,MRVL,LULU,AIG,A,SPG,PINS,KMB,TROW,TT,BK,BCS,DD,SRE,PBR,BBVA,KMI,MCHP,APTV,BEKE,ROST,AEP,EA,BAX,PPG,LVS,GOLD,PRU,MPC,APH,SNPS,SYY,MSCI,CRH,ERIC,CARR,ALXN,CNC,PSX,DXCM,PXD,MFC,ALL,CMG,MTCH,TRV,PH,GIS,SU,RACE,FTNT,AFL,PAYX,MFG,CTSH,XEL,ORLY,CTAS,CSAN,DFS,IFF,TDG,AMX,CDNS,ADM,NTR,CMI,LYB,BF.B,HSY,MSI,HLT,PANW,PATH,ALC,MT,HPQ,GLW,YUM,SBAC,RSG,STM,CSGP,DISCB,OTIS,BILI,BF.A,WELL,LUV,RMD,NWG,VLO,PTON,WMB,BSBR,W,WLTW,ZBH,SWK,FRC,ROK,CCL,ORAN,CTVA,KKR,CHT,VFC,WCN,PBR.A,BGNE,DHI,PCAR,XLNX,MTD,AME,PEG,CHWY,TU,NUE,ITUB,NOK,LBRDK,SLF,FAST,LU,FERG,VIACA,OKTA,LBRDA,DDOG,AZO,AVB,APP,MCK,CPRT,NET,SIVB,AJG,AMP,ANSS,STT,CBRE,DAL,WEC,AWK,MGA,KR,FNV,YUMC,ODFL,ZG,GMAB,DB,LEN,NDAQ,ZS,SWKS,EPAM,TTD,AMC,U,BBY,ARE,SGEN,ES,SYF,Z,VRSK,CCEP,MXIM,EFX,ANET,FITB,TSN,SIRI,VIAC,GRMN,KEYS,CS,HES,ZBRA,TEF,EC,DTE,ED,BLL,BBD,KSU,HRL,OXY,O,WORK,RCI,WY,WST,LH,RYAAY,YNDX,HUBS,RNG,EXPE,XP,VRSN,IMO,CAJ,OKE,FMS,IP,ABC,TDOC,CERN,FTV,TLK,MKC,CDW,GWW,UMC,MKC.V,TCOM,APO,CNHI,DLTR,HIG,PKX,LEN.B,WDC,VMC,NVCR,BBDO,CVNA,LNG,PPL,FLT,GIB,RCL"
+    # url = "https://www.cmlviz.com/get_live_quotes.php?tickers=AAPL,MSFT,AMZN,GOOGL,FB,BRK.A,BRK.B,TSM,TSLA,BABA,V,JPM,NVDA,JNJ"
+    response = requests.get(url,headers=headers)
+    if response.status_code == 200:
+        topStocksByMarketCap = response.json()["results"]
+        # count=0
+        for company in topStocksByMarketCap:
+            # count+=1
+            # print (str(count) + " : " + company["symbol"])
+            marketCapStocks[company["symbol"]] ={
+                                                    "lastPrice": "$" + str(company["lastPrice"]),
+                                                    "netChange": "$" + str(company["netChange"]),
+                                                    "percentChange": str(company["percentChange"]) + "%"
+                                                }
+    return pd.DataFrame.from_dict({(i): marketCapStocks[i] 
+                           for i in marketCapStocks.keys()},
+                       orient='index')
+def CMLVizAllStockNews():
+    headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:87.0) Gecko/20100101 Firefox/87.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+                "TE": "Trailers"
+            }
+    allStockNews = {}
+    batchTickers =  [
+                        "AAL,AAPL,ABBV,ABNB,ACB,ADBE,ADSK,AFRM,AI,ALB,AMD,AMZN,ANET,APHA,API,APPS,AQB,ASAN,ATVI,AVGO,AXON,AXP,AYX,BA,BABA,BAC,BIDU,BIGC,BILI,BKNG,BMBL,BNGO,BOX,BRK.B,BYND,CCL,CGC,CHGG,CHWY,CLOV,CMG,COIN,COST,COUP,CRSP,CRSR,CRWD,CSCO,CSIQ,CSPR,CVNA,CVX,DAL,DASH,DBX,DDOG,DIS,DKNG,DNKN,DOCU,EA,EDIT,ENPH,ESTC,ETSY,F,FB,FCAU,FDX,FSLR,FSLY,FTCH,FUV,FVRR,GE,GM,GOOGL,GPRO,HLT,HUYA,IBM,ILMN,INTC,INTU,IPGP,IRDM,ISRG,JD,JMIA,JNJ,JPM,KO,MMM,NET,NTLA,NVTA,T,TEAM,TWOU,XOM",
+                        "CRM,KHC,LMND,LMT,LOGI,LULU,LUV,LVGO,LYFT,MA,MAXR,MCD,MDB,MDLA,MELI,MP,MRNA,MSFT,MSTR,MTCH,MU,NEE,NFLX,NIO,NIU,NKE,NNDM,NOW,NTDOY,NTNX,NVDA,OKTA,OPEN,ORCL,PACB,PAYC,PD,PDD,PENN,PEP,PFE,PG,PINS,PLNHF,PLTR,PLUG,PRLB,PSTG,PTON,PYPL,QCOM,RBLX,RDFN,RKT,ROKU,RUN,RVLV,SAP,SBUX,SDGR,SE,SEDG,SFIX,SHAK,SHOP,SKLZ,SNAP,SNE,SNOW,SONO,SPLK,SPOT,SPWR,SQ,SQSP,SSYS,STMP,SWCH,SWKS,TCEHY,TDOC,TER,TGT,TLRY,TM,TMUS,TREE,TSLA,TSM,TTCF,TTD,TTWO,TWLO,TWST,TWTR,U,UBER,UPWK,VEEV,WORK",
+                        "EBAY,FUBO,IRBT,RAPT,SPCE,V,VZ,W,WDAY,WE,WFC,WISH,WIX,WKHS,WMT,XIACF,XPEV,Z,ZEN,ZM,ZS",
+                        "OXY,DLR,VIAC,CTSH,UA,AIZ,MNST,NWS,WLTW,IPG,LB,AVB,RCL,ED,GL,NLSN,AXP,KO,TT,MGM,EQR,JPM,PRU,HII,HFC,PKI,LLY,WMT,LMT,WAB,FMC,LKQ,HLT,GIS,TGT,SCHW,ADI,GPS,MCHP,POOL,BBY,VNO,ARE,LHX,NLOK,ULTA,DISH,STT,VLO,PBCT,ILMN,HUM,CAH,OMC,CDNS,TWTR,IBM,FISV,KIM,DUK,RJF,ZION,VTR,CL,EXPE,ORLY,ALB,JBHT,NVR,TSLA,WHR,BWA,VFC,ES,LH,EW,JCI,HOLX,AMCR,WMB,XYL,NCLH,KEY,RF,HSY,O,LDOS,SO,CTAS,CERN,MAA,HES,EOG,WAT,SPG,DFS,GNRC,ZBH,LUV,FRT,CBOE,CZR,IP,CME,ROST,OTIS,UNM,AES,COG,HRL,LRCX,PFE,APTV,NKE,HWM,PNW,CMCSA,WU,DAL,BSX,CNC,AWK,EQIX,EFX,GE,KR,TEL,NRG,DLTR,AVGO,PFG,MO,DHR,DISCA,BK,CMA,EXR,MTD,T,MDLZ,WRK,HD,LEN,FTV,ATO,DXCM,HIG,PENN,ITW,DG,FOX,XLNX,EA,AEP,PAYX,MA,CINF,ALXN,COP,KSU,DISCK,UDR,PKG,SEE,NTRS,CLX,UNH,NFLX,CHD,AOS,ODFL,IFF,ORCL,HBI,TRMB,STZ,YUM,DOV,CVX,CTVA,PEAK,EL,XRAY,PHM,PPL,GRMN,VMC,FANG,TYL,GPN,APD,BAX,AEE,ALGN,HAL,TFC,AVY,UAA,PNC,WFC,CPB,CVS,ADM,GWW,ZBRA,DD,MRO,PCAR,UNP,HPE,ADSK,QRVO,LYB,SRE,GOOG,WBA,MHK,RE,ANET,AIG,BAC,SPGI,DXC,AAL,USB,STE,WST,IT,KMX,BDX,TDY,BIIB,CPRT,WEC,AJG,IDXX,MPWR,CRM,CDW,ANTM,DRE,JNJ,RSG,NXPI,BR,DRI,BF.B,PGR,AMZN,DPZ,ISRG,ROL,EIX,MRK,FRC,ZTS,LW,TFX,A,PM,MS,MMC,NTAP,MLM,CMS,CTXS,EXC,CHRW,SNPS,CMI,ALLE,ABMD,ECL,ALL,PLD,HCA,UAL,SBAC,MMM,FFIV,OKE,ESS,GD,CCL,TMUS,ADP,ABBV,UHS,HAS,CMG,CFG,INFO,GPC,MKC,VRSK,BKR,APH,PAYC,BMY,XEL,TDG,SYY,LNT,PSX,EMR,ATVI,C,SLB,VZ,J,MOS,CHTR,KEYS,COST,DOW,SWKS,DVN,MXIM,ROP,TAP,CNP,AON,GOOGL,INTU,PXD,WM,CTLT,EMN,BXP,SIVB,MAS,BLL,VRSN,IQV,CAG,CE,FDX,BKNG,ADBE,FB,MAR,TMO,FBHS,EVRG,NEM,SNA,DE,IPGP,EBAY,LNC,TPR,K,SJM,WDC,ETR,WY,PTC,NI,URI,LVS,HST,SWK,MTB,WELL,NOW,FIS,INCY,NUE,PH,FLT,AMAT,NDAQ,WYNN,ENPH,TROW,ICE,STX,FAST,BIO,PNR,PYPL,PRGO,SBUX,BRK.B,COO,EXPD,AMP,TJX,MDT,HSIC,MCD,APA,TSCO,SYF,FITB,TER,BLK,LOW,GM,IRM,MPC,FE,NOV,LYV,NOC,MCO,FOXA,MSI,LEG,RHI,INTC,WRB,CBRE,PVH,ETSY,UPS,FLIR,AZO,GS,XOM,HPQ,TRV,BA,ROK,RMD,LIN,JKHY,ACN,FTNT,RTX,FCX,CF,IVZ,AME,RL,CCI,SHW,L,V,REGN,DHI,TXN,KLAC,BEN,NEE,CI,AMGN,CAT,QCOM,COF,TTWO,CSX,DTE,D,AAP,ABC,NVDA,GILD,DGX,SYK,CB,DIS,AFL,GLW,MYL,ANSS,PEP,PG,MKTX,IR,KMB,IEX,CARR,DVA,ETN,MU,REG,PWR,TXT,PSA,MET,KMI,NWSA,JNPR,VRTX,AKAM,MSCI,PPG,AAPL,F,NWL,NSC,CSCO,HON,ALK,AMD,MCK,CTL,PEG,AMT,KHC,ABT,MSFT,HBAN,TSN,PTON,KDP,MTCH,TCOM,MRNA,SIRI,MRVL,ASML,ZM,DOCU,CHKP,WDAY,SGEN,BIDU,SPLK,PDD,JD,NTES,TEAM,OKTA,LULU,MELI"
+                    ]
+    # Finding Recent News for all Stocks
+    for ticker in batchTickers:
+        url = "https://www.cmlviz.com/getLines.php?tickers=" + ticker + "&key=106a6c241b8797f52e1e77317b96a201"
+        response = requests.get(url,headers=headers)
+        news = response.json()
+        if response.status_code == 200:
+            for stock in news:
+                if news[stock] != "":
+                    allStockNews[stock] = news[stock]
+    
+    # Finding Price Movements for Stocks in the News
+    for ticker in allStockNews:
+        url = "https://www.cmlviz.com/get_live_quotes.php?tickers=" + ticker
+        response = requests.get(url,headers=headers)
+        quotes = response.json()
+        if response.status_code == 200:
+            allStockNews[ticker]["priceChange"] = quotes["results"][0]["netChange"]
+            allStockNews[ticker]["percentChange"] = quotes["results"][0]["percentChange"]
+    return allStockNews
+
+
 
 # print ("------------------------------------------------------------------------------------")
 
@@ -975,7 +1097,9 @@ topbar = Navbar(
                 View('Company Financials', 'companyFinancialsComparison'),
                 View('FinViz Stock Screener', 'finVizStockScreen'),
                 View('CryptoCurrencies',"cryptoHoldings"),
-                View("Value Investing Metrics and Ratios","valueinvesting")
+                View("Value Investing Metrics and Ratios","valueinvesting"),
+                View("News","stockNews"),
+                View("Market Cap","marketCap")
                 )
 
 # registers the "top" menubar
@@ -1194,6 +1318,36 @@ def cryptoHoldings():
 @app.route("/valueinvesting/",methods = ["GET"])
 def valueinvesting():
     return render_template("The Complete Value Investing Cheat Sheet.html")
+
+@app.route("/stockNews/",methods = ["GET"])
+def stockNews():
+    # highestRevenueGrowthStocks = CMLVizHighestRevGrowthStocks()
+    # hotMomentumStocks = CMLVizUptrendMomentumStocks()
+    # dropMomentumStocks = CMLVizInvertedMomentumStocks()
+    stockNewsBreaking = CMLVizBreakingNews()
+    allStockNews = CMLVizAllStockNews()
+
+    return render_template(
+                        "stockNews.html",
+                        stockNewsBreaking=stockNewsBreaking,
+                        allStockNews=allStockNews
+                        )
+
+@app.route("/marketCap/",methods = ["GET"])
+def marketCap():
+    marketCapStocks = CMLVizTopMarketCapStocks() 
+    marketCapStocks = marketCapStocks.reset_index()
+    marketCapStocks.index.names = ["Index"]
+    marketCapStocks.columns = ["Stock", "Last Price","Net Change", "Price Change"]
+    partitions = 25
+    marketCapStocksArray = np.array_split(marketCapStocks, partitions)
+
+    return render_template(
+                        "marketCap.html",
+                        marketCapStocksArray=marketCapStocksArray
+                        )
+
+
 
 ###############################################
 #             Init our app                    #
