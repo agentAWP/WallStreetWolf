@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Moon Investor!!!</title>
+   <style>
+      li {
+            color:darkorange
+         }
+
+      * {
+      
+        box-sizing: border-box;
+      
+      }
+      
+      .row {
+      
+        margin-left:-5px;
+      
+        margin-right:-5px;
+      
+      }
+      .column {
+      
+        float: left;
+      
+        width: 20%;
+      
+        padding: 5px;
+      
+      }
+      /* Clearfix (clear floats) */
+      
+      .row::after {
+      
+        content: "";
+      
+        clear: both;
+      
+        display: table;
+      
+      }
+      table {
+      
+        border-collapse: collapse;
+      
+        border-spacing: 0;
+      
+        width: 50%;
+      
+        border: 1px solid #ddd;
+        margin-left:15px;
+        margin-right:15px;
+      
+      }
+      th, td {
+      
+        text-align: center;
+      
+      }
+      tr:nth-child(even) {
+      
+        background-color: #f2f2f2;
+      
+      }
+      
+   </style>
+   </head>
+   <body>
+        {% extends "index.html" %}
+        {% block content %}
+
+            <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+        
+            <h1>Top 500 Market Stocks</h1>
+            <div class="row">
+                {% for x in marketCapStocksArray %}
+                <div class="column">
+                    <p></p>
+                    {{ x.to_html() | safe}}
+                    <p></p>
+                </div>
+                {% endfor %}
+            </div>
+
+        {% endblock %}
+   </body>
+</html>
