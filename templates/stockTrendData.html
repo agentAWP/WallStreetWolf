@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Enter Ticker</title>
+   </head>
+   <style>
+
+      * {
+      
+        box-sizing: border-box;
+      
+      }
+      
+      .row {
+      
+        margin-left:-5px;
+      
+        margin-right:-5px;
+      
+      }
+      .column {
+      
+        float: left;
+      
+        width: 15%;
+      
+        padding: 2px;
+      
+      }
+      /* Clearfix (clear floats) */
+      
+      .row::after {
+      
+        content: "";
+      
+        clear: both;
+      
+        display: table;
+      
+      }
+      table {
+      
+        border-collapse: collapse;
+      
+        border-spacing: 0;
+      
+        width: 50%;
+      
+        border: 1px solid #ddd;
+      
+      }
+      th, td {
+      
+        text-align: center;
+      
+      }
+      tr:nth-child(even) {
+      
+        background-color: #f2f2f2;
+      
+      } 
+   </style>
+   <body>
+      {% extends "index.html" %}
+      {% block content %}
+      {{super()}}
+         <h1 style="text-align:left">Price Movement/Trend of stocks</h1>
+         <p></p>
+         {% for x in range(data| length) %}
+            <div class="column">
+               <p>Day Price Movement for {{data[x].name}} </p>
+               <p>{{data[x].to_html() | safe }}</p>
+               <p></p>
+               <p></p>
+            </div>
+         {% endfor %}
+      {% endblock %}
+   </body>
+</html>

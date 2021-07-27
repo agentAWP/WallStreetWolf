@@ -16,6 +16,7 @@ import requests,datetime,re,time
 import numpy as np
 from bs4 import BeautifulSoup as soup
 from urllib.request import Request, urlopen
+from datetime import datetime, timedelta
 
 # pd.set_option('display.max_colwidth', 20)
 
@@ -1081,6 +1082,75 @@ def CMLVizAllStockNews():
 
 
 
+def CMLVizHistoricalPriceDataByStock(stockSector):
+
+
+    indexGSPCData = []
+
+    #Looping for S&P500 Tickers
+    # url = "https://topforeignstocks.com/indices/components-of-the-sp-500-index/"
+    # indexGSPC = pd.read_html(url)[0]
+    # indexGSPC = indexGSPC.drop(columns=["S.No."])
+    # indexGSPC = indexGSPC.set_index(indexGSPC.columns[1])
+    # allTickers = []
+    # for ticker in indexGSPC.index:
+    #     allTickers.append(ticker)
+
+    allTickers = ['AAPL', 'MSFT', 'AMZN', 'FB', 'TSLA', 'GOOGL', 'GOOG', 'BRK.B', 'JNJ', 'JPM', 'V', 'UNH', 'PG', 'NVDA', 'DIS', 'MA', 'HD', 'PYPL', 'BAC', 'VZ', 'CMCSA', 'ADBE', 'NFLX', 'INTC', 'T', 'MRK', 'PFE', 'WMT', 'CRM', 'TMO', 'ABT', 'PEP', 'KO', 'XOM', 'CSCO', 'ABBV', 'NKE', 'AVGO', 'QCOM', 'CVX', 'ACN', 'COST', 'MDT', 'MCD', 'NEE', 'TXN', 'DHR', 'HON', 'UNP', 'LIN', 'BMY', 'WFC', 'C', 'AMGN', 'LLY', 'PM', 'SBUX', 'LOW', 'ORCL', 'IBM', 'AMD', 'UPS', 'BA', 'MS', 'BLK', 'RTX', 'CAT', 'GS', 'NOW', 'GE', 'MMM', 'INTU', 'CVS', 'AMT', 'TGT', 'ISRG', 'DE', 'CHTR', 'BKNG', 'SCHW', 'MU', 'AMAT', 'LMT', 'FIS', 'TJX', 'ANTM', 'MDLZ', 'SYK', 'CI', 'ZTS', 'AXP', 'SPGI', 'GILD', 'TMUS', 'MO', 'LRCX', 'BDX', 'ADP', 'CSX', 'CME', 'PLD', 'CB', 'CL', 'TFC', 'ADSK', 'ATVI', 'USB', 'PNC', 'DUK', 'FISV', 'CCI', 'ICE', 'SO', 'NSC', 'APD', 'GPN', 'VRTX', 'EQIX', 'ITW', 'SHW', 'D', 'FDX', 'DD', 'HUM', 'EL', 'ADI', 'MMC', 'ECL', 'ILMN', 'EW', 'PGR', 'GM', 'DG', 'BSX', 'NEM', 'ETN', 'COF', 'REGN', 'EMR', 'COP', 'AON', 'WM', 'HCA', 'MCO', 'NOC', 'FCX', 'ROP', 'KMB', 'ROST', 'DOW', 'CTSH', 'KLAC', 'TEL', 'IDXX', 'BAX', 'TWTR', 'EXC', 'EA', 'APH', 'CNC', 'ALGN', 'AEP', 'SNPS', 'APTV', 'STZ', 'MCHP', 'A', 'BIIB', 'SYY', 'CMG', 'CDNS', 'LHX', 'MET', 'DLR', 'DXCM', 'JCI', 'TT', 'BK', 'MSCI', 'XLNX', 'PH', 'IQV', 'PPG', 'GIS', 'CMI', 'F', 'HPQ', 'GD', 'TRV', 'AIG', 'TROW', 'EBAY', 'MAR', 'SLB', 'SRE', 'MNST', 'XEL', 'EOG', 'ALXN', 'ORLY', 'INFO', 'CARR', 'ALL', 'PSA', 'ZBH', 'TDG', 'VRSK', 'WBA', 'PRU', 'YUM', 'HLT', 'PSX', 'ANSS', 'CTAS', 'RMD', 'CTVA', 'PCAR', 'ES', 'ROK', 'DFS', 'BLL', 'SBAC', 'MCK', 'PAYX', 'AFL', 'ADM', 'MTD', 'MSI', 'AZO', 'MPC', 'AME', 'FAST', 'SWK', 'KMI', 'PEG', 'GLW', 'VFC', 'LUV', 'SPG', 'FRC', 'WEC', 'OTIS', 'AWK', 'STT', 'SWKS', 'DLTR', 'ENPH', 'WLTW', 'WELL', 'WMB', 'KEYS', 'DAL', 'CPRT', 'MXIM', 'WY', 'LYB', 'BBY', 'CLX', 'KR', 'FTV', 'CERN', 'VLO', 'TTWO', 'ED', 'AMP', 'MKC', 'AJG', 'EIX', 'FLT', 'DTE', 'DHI', 'VIAC', 'WST', 'FITB', 'VTRS', 'SIVB', 'HSY', 'EFX', 'AVB', 'KHC', 'ZBRA', 'PXD', 'TER', 'VMC', 'PPL', 'LH', 'PAYC', 'ETSY', 'CHD', 'MKTX', 'LEN', 'O', 'CBRE', 'IP', 'QRVO', 'RSG', 'NTRS', 'KSU', 'ARE', 'VRSN', 'HOLX', 'SYF', 'EQR', 'ALB', 'XYL', 'ODFL', 'EXPE', 'FTNT', 'MLM', 'URI', 'LVS', 'TSN', 'ETR', 'MTB', 'CDW', 'TFX', 'DOV', 'AEE', 'AMCR', 'GRMN', 'OKE', 'HIG', 'KEY', 'GWW', 'BR', 'HAL', 'PKI', 'COO', 'CTLT', 'VTR', 'TYL', 'IR', 'OXY', 'CFG', 'TSCO', 'STE', 'NUE', 'RF', 'INCY', 'AKAM', 'HES', 'DGX', 'WDC', 'CMS', 'CAH', 'CAG', 'ULTA', 'KMX', 'AES', 'CE', 'ABC', 'WAT', 'DRI', 'ANET', 'FE', 'VAR', 'EXPD', 'CTXS', 'FMC', 'IEX', 'NDAQ', 'POOL', 'K', 'CCL', 'HPE', 'PEAK', 'BKR', 'DPZ', 'ESS', 'GPC', 'J', 'IT', 'HBAN', 'WAB', 'ABMD', 'EMN', 'NTAP', 'MAS', 'DRE', 'MAA', 'BF.B', 'EXR', 'NVR', 'LDOS', 'OMC', 'PKG', 'RCL', 'AVY', 'BIO', 'STX', 'SJM', 'PFG', 'TDY', 'CINF', 'CHRW', 'HRL', 'CXO', 'BXP', 'UAL', 'IFF', 'XRAY', 'JKHY', 'MGM', 'NLOK', 'JBHT', 'RJF', 'FBHS', 'LNT', 'HAS', 'EVRG', 'WRK', 'WHR', 'PHM', 'AAP', 'CNP', 'ATO', 'TXT', 'FFIV', 'LW', 'ALLE', 'UHS', 'UDR', 'DVN', 'L', 'HWM', 'LB', 'LKQ', 'WYNN', 'PWR', 'CBOE', 'FOXA', 'LYV', 'LUMN', 'HST', 'BWA', 'HSIC', 'TPR', 'RE', 'CPB', 'LNC', 'IPG', 'SNA', 'WU', 'AAL', 'GL', 'WRB', 'MOS', 'TAP', 'PNR', 'CF', 'NRG', 'DVA', 'FANG', 'ROL', 'DISCK', 'PNW', 'CMA', 'MHK', 'NWL', 'NI', 'IPGP', 'AIZ', 'IRM', 'ZION', 'DISH', 'JNPR', 'NCLH', 'AOS', 'PVH', 'NLSN', 'RHI', 'DXC', 'SEE', 'NWSA', 'REG', 'COG', 'BEN', 'IVZ', 'HII', 'FLIR', 'KIM', 'APA', 'ALK', 'PRGO', 'MRO', 'PBCT', 'LEG', 'NOV', 'FRT', 'VNO', 'DISCA', 'RL', 'HBI', 'FLS', 'FTI', 'UNM', 'FOX', 'VNT', 'GPS', 'SLG', 'XRX', 'HFC', 'UAA', 'UA', 'NWS']
+
+
+    #UsingCMLViz
+
+    #Initializing Dict to store
+    #per stock price movement as dataframe
+    stockData = {}
+
+    for ticker in stockSector:
+
+        #Retrieving Past prices
+        url = "https://capitalmarketlabs2.websol.barchart.com/proxies/timeseries//queryminutes.ashx?symbol=" +ticker + "&interval=1440&maxrecords=30&order=desc&dividends=false&backadjust=false&daystoexpiration=1&contractroll=expiration"
+        r = requests.get(url,verify=False)
+        historicalData = r.text.splitlines()
+        dataPriceMap = []
+        for day in historicalData:
+            dataPriceMap.append((day.split(",")[0].split(" ")[0],day.split(",")[5]))
+        df = pd.DataFrame(dataPriceMap,columns=["Date","Price"]).set_index(pd.DataFrame(dataPriceMap,columns=["Date","Price"]).columns[0])
+        stockData[ticker] = []
+
+        print ("Working on Ticker: " + ticker)
+        # Storing Present Day : Date, Price, Day from past, Percent Change
+        pastDays = [1,3,5,7,10,14,21,30]
+        todayDateTimeObj = datetime.strptime(df.iloc[0].name, '%Y-%m-%d')
+        todayDate = datetime.strftime(todayDateTimeObj.date(),'%Y-%m-%d')
+        todayPrice = df.loc[todayDate]["Price"]
+        # print ("Today Date is " + str(todayDate))
+        # print ("Today Price is " + str(todayPrice))
+        stockData[ticker].append((todayDate,todayPrice,0,0))
+
+        #Looping in the Past
+        #Finding price data for day in the past
+        #Storing: Date, Price, Day from Past, Percent Change
+        for day in pastDays:
+            pastDayTimeObj = todayDateTimeObj-timedelta(days=day)
+            pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
+            
+            while pastDay not in df.index:
+                pastDayTimeObj = pastDayTimeObj-timedelta(days=1)
+                pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
+            pastPrice = df.loc[pastDay]["Price"]
+            percentChange = 100*(float(todayPrice) - float(pastPrice))/float(pastPrice)
+            stockData[ticker].append((pastDay,pastPrice,day,percentChange))
+
+        stockData[ticker] = pd.DataFrame(stockData[ticker],columns=["Date","Past Price", "Past Days", "Percent Change"])
+        stockData[ticker] = stockData[ticker].set_index(stockData[ticker].columns[0])
+        stockData[ticker] = stockData[ticker].rename_axis(ticker)
+        stockData[ticker].name = ticker
+        indexGSPCData.append(stockData[ticker])
+
+    
+    return indexGSPCData
+
+
 # print ("------------------------------------------------------------------------------------")
 
 
@@ -1099,7 +1169,8 @@ topbar = Navbar(
                 View('CryptoCurrencies',"cryptoHoldings"),
                 View("Value Investing Metrics and Ratios","valueinvesting"),
                 View("News","stockNews"),
-                View("Market Cap","marketCap")
+                View("Market Cap","marketCap"),
+                View("Stock Trend","stockTrend")
                 )
 
 # registers the "top" menubar
@@ -1348,6 +1419,77 @@ def marketCap():
                         )
 
 
+###############################################
+#    Render StockTrend #
+###############################################
+@app.route('/input')
+def stockTrend():
+    return render_template(
+                        "stockTrend.html",
+                        )
+
+###############################################
+#    Render StockTrendData #
+###############################################
+@app.route('/stockTrendData/',methods = ["POST"])
+def stockTrendData():
+
+    if request.form["stocks"] == "Basic Materials":
+        stockSector = ["LIN","SHW","APD","ECL","FCX","NEM","DOW","DD","PPG","IFF"]
+
+    if request.form["stocks"] == "Communication Services":
+        stockSector = ["GOOG","FB","DIS","CMCSA","VZ","NFLX","T","TMUS","CHTR","ATVI","TWTR","EA","VIAC","DISH","FOXA","FOX","TTWO","LYV"]
+
+    if request.form["stocks"] == "Consumer Cyclical":
+        stockSector = ["AMZN","TSLA","HD","NKE","MCD","SBUX","LOW","BKNG","GM","TJX","F","CMG","EBAY","MAR","ROST","APTV","ORLY","YUM","LVS","HLT","DHI","LEN","ETSY","DPZ","CZR","MGM","ULTA","WHR","WYNN","PENN"]
+
+    if request.form["stocks"] == "Consumer Defensive":
+        stockSector = ["WMT","PG","KO","PEP","COST","PM","TGT","EL","MDLZ","MO","CL","DG","KHC","KR","TSN","DLTR","MKC","K"]
+
+    if request.form["stocks"] == "Energy":
+        stockSector = ["XOM","CVX","COP","EOG","KMI","SLB","PXD","MPC","PSX","WMB","VLO","OXY","HAL","FANG"]
+
+    if request.form["stocks"] == "Financial":
+        stockSector = ["BRK.B","V","JPM","MA","PYPL","BAC","WFC","MS","C","AXP","BLK","GS","SCHW","SPGI","USB","PNC","CME","COF","MCO","AON","MET","AIG","SIVB","IVZ"]
+        
+    if request.form["stocks"] == "Health Care":
+        stockSector = ["JNJ","UNH","PFE","LLY","ABT","ABBV","DHR","TMO","MRK","MDT","BMY","AMGN","MRNA","ISRG","CVS","SYK","ZTS","ANTM","GILD","REGN","HUM","VRTX","BIIB","A","WBA","DVA"]
+
+    if request.form["stocks"] == "Industrials":
+        stockSector = ["UPS","HON","UNP","BA","RTX","MMM","CAT","GE","DE","LMT","ADP","FDX","CSX","ETN","WM","NOC","GPN","LUV","FAST","UAL","AAL"]
+
+    if request.form["stocks"] == "Real Estate":
+        stockSector = ["AMT","PLD","CCI","EQIX","PSA","DLR","SPG","SBAC","WELL","EQR","AVB","ARE","CBRE","O","BXP","IRM"]
+        
+    if request.form["stocks"] == "Technology":
+        stockSector = ["AAPL","MSFT","NVDA","ADBE","ORCL","INTC","CSCO","CRM","ACN","AVGO","QCOM","INTU","IBM","AMAT","NOW","AMD","MU","ANET","PAYC"]
+
+    if request.form["stocks"] == "Utilities":
+        stockSector = ["NEE","DUK","SO","D","EXC","AEP","SRE","XEL","PEG","AWK","WEC"]
+    
+    if request.form["stocks"] == "Vanguard ETFs":
+        stockSector = ["VGT","VHT","VCR","VOX","VFH","VIS","VDC","VPU","VAW","VNQ","VDE"]
+    
+    if request.form["stocks"] == "S&P500 Top 10":
+        stockSector = ['AAPL', 'MSFT', 'AMZN', 'FB', 'TSLA', 'GOOGL', 'GOOG', 'BRK.B', 'JNJ', 'JPM']
+    
+    if request.form["stocks"] == "S&P500 Top 10-20":
+        stockSector = ['V', 'UNH', 'PG', 'NVDA', 'DIS', 'MA', 'HD', 'PYPL', 'BAC', 'VZ']
+    
+    if request.form["stocks"] == "S&P500 Top 20-30":
+        stockSector = ['CMCSA', 'ADBE', 'NFLX', 'INTC', 'T', 'MRK', 'PFE', 'WMT', 'CRM', 'TMO']
+
+    if request.form["stocks"] == "S&P500 Top 30-40":
+        stockSector = ['ABT', 'PEP', 'KO', 'XOM', 'CSCO', 'ABBV', 'NKE', 'AVGO', 'QCOM', 'CVX']
+    
+    if request.form["stocks"] == "S&P500 Top 40-50":
+        stockSector = ['ACN', 'COST', 'MDT', 'MCD', 'NEE', 'TXN', 'DHR', 'HON', 'UNP', 'LIN']
+
+    placeHolder = CMLVizHistoricalPriceDataByStock(stockSector)
+    return render_template(
+                        "stockTrendData.html",
+                        data=placeHolder
+                        )
 
 ###############################################
 #             Init our app                    #
