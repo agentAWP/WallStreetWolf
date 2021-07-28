@@ -67,14 +67,25 @@
       {{super()}}
          <h1 style="text-align:left">Price Movement/Trend of stocks</h1>
          <p></p>
-         {% for x in range(data| length) %}
-            <div class="column">
-               <p>Day Price Movement for {{data[x].name}} </p>
-               <p>{{data[x].to_html() | safe }}</p>
-               <p></p>
-               <p></p>
-            </div>
-         {% endfor %}
+         {% if switch == 1 %}
+          <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
+          {% for x in range(data| length) %}
+            <p>Price Movement for {{data[x].name}} </p>
+            <p>{{data[x].to_html() | safe }}</p>
+            <p></p>
+            <p></p>
+          {% endfor %}
+        {% elif switch == 0 %}
+          <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
+          <p></p>
+          {% for x in data %}
+            <p>Day Price Movement for {{data[x].name}} </p>
+            <p>{{data[x].to_html() | safe }}</p>
+            <p></p>
+            <p></p>
+          {% endfor %}
+        {% endif %}
       {% endblock %}
    </body>
 </html>
+
