@@ -1107,7 +1107,7 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
     #per stock price movement as dataframe
     stockData = {}
 
-    for ticker in stockSector[:5]:
+    for ticker in stockSector:
 
         #Retrieving Past prices
         url = "https://capitalmarketlabs2.websol.barchart.com/proxies/timeseries//queryminutes.ashx?symbol=" +ticker + "&interval=1440&maxrecords=30&order=desc&dividends=false&backadjust=false&daystoexpiration=1&contractroll=expiration"
