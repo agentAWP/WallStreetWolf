@@ -65,8 +65,6 @@
       {% extends "index.html" %}
       {% block content %}
       {{super()}}
-         <h1 style="text-align:left">Price Movement/Trend of stocks</h1>
-         <p></p>
          {% if switch == 1 %}
           <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
           {% for x in range(data| length) %}

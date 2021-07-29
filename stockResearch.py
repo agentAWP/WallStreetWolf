@@ -1107,7 +1107,7 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
     #per stock price movement as dataframe
     stockData = {}
 
-    for ticker in stockSector:
+    for ticker in stockSector[:5]:
 
         #Retrieving Past prices
         url = "https://capitalmarketlabs2.websol.barchart.com/proxies/timeseries//queryminutes.ashx?symbol=" +ticker + "&interval=1440&maxrecords=30&order=desc&dividends=false&backadjust=false&daystoexpiration=1&contractroll=expiration"
@@ -1214,6 +1214,7 @@ def CMLVizHistoricalPriceDataByDay(stockSector):
     for day in dayPriceMovement:
         dayPriceMovement[day] = pd.DataFrame(dayPriceMovement[day],columns=["Ticker","Past Price","Past Date","Past Days","Percent Change"])
         dayPriceMovement[day] = dayPriceMovement[day].set_index(dayPriceMovement[day].columns[0])
+        dayPriceMovement[day] = dayPriceMovement[day].sort_values(by="Percent Change",ascending=False)
         dayPriceMovement[day].name = str(day) + " Day"
 
     return dayPriceMovement
@@ -1565,7 +1566,8 @@ def stockTrendData():
     return render_template(
                         "stockTrendData.html",
                         data=placeHolder,
-                        switch = switch
+                        switch = switch,
+                        sector = selection
                         )
 
 ###############################################
