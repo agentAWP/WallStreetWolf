@@ -1503,71 +1503,83 @@ def stockTrend():
 @app.route('/stockTrendData/',methods = ["POST"])
 def stockTrendData():
 
-    selection = request.form.get('selection')
-    trend = request.form.get("trend")
+    singleStock = request.form.get("symbol")
+    print ("This is the value of the selection" + str(singleStock))
 
-    if selection == "Basic Materials":
-        stockSector = ["LIN","SHW","APD","ECL","FCX","NEM","DOW","DD","PPG","IFF"]
-
-    if selection == "Communication Services":
-        stockSector = ["GOOG","FB","DIS","CMCSA","VZ","NFLX","T","TMUS","CHTR","ATVI","TWTR","EA","VIAC","DISH","FOXA","FOX","TTWO","LYV"]
-
-    if selection == "Consumer Cyclical":
-        stockSector = ["AMZN","TSLA","HD","NKE","MCD","SBUX","LOW","BKNG","GM","TJX","F","CMG","EBAY","MAR","ROST","APTV","ORLY","YUM","LVS","HLT","DHI","LEN","ETSY","DPZ","CZR","MGM","ULTA","WHR","WYNN","PENN"]
-
-    if selection == "Consumer Defensive":
-        stockSector = ["WMT","PG","KO","PEP","COST","PM","TGT","EL","MDLZ","MO","CL","DG","KHC","KR","TSN","DLTR","MKC","K"]
-
-    if selection == "Energy":
-        stockSector = ["XOM","CVX","COP","EOG","KMI","SLB","PXD","MPC","PSX","WMB","VLO","OXY","HAL","FANG"]
-
-    if selection == "Financial":
-        stockSector = ["BRK.B","V","JPM","MA","PYPL","BAC","WFC","MS","C","AXP","BLK","GS","SCHW","SPGI","USB","PNC","CME","COF","MCO","AON","MET","AIG","SIVB","IVZ"]
+    if singleStock  == "":
+    
+        selection = request.form.get('selection')
         
-    if selection == "Health Care":
-        stockSector = ["JNJ","UNH","PFE","LLY","ABT","ABBV","DHR","TMO","MRK","MDT","BMY","AMGN","MRNA","ISRG","CVS","SYK","ZTS","ANTM","GILD","REGN","HUM","VRTX","BIIB","A","WBA","DVA"]
+        trend = request.form.get("trend")
 
-    if selection == "Industrials":
-        stockSector = ["UPS","HON","UNP","BA","RTX","MMM","CAT","GE","DE","LMT","ADP","FDX","CSX","ETN","WM","NOC","GPN","LUV","FAST","UAL","AAL"]
+        if selection == "Basic Materials":
+            stockSector = ["LIN","SHW","APD","ECL","FCX","NEM","DOW","DD","PPG","IFF"]
 
-    if selection == "Real Estate":
-        stockSector = ["AMT","PLD","CCI","EQIX","PSA","DLR","SPG","SBAC","WELL","EQR","AVB","ARE","CBRE","O","BXP","IRM"]
+        if selection == "Communication Services":
+            stockSector = ["GOOG","FB","DIS","CMCSA","VZ","NFLX","T","TMUS","CHTR","ATVI","TWTR","EA","VIAC","DISH","FOXA","FOX","TTWO","LYV"]
+
+        if selection == "Consumer Cyclical":
+            stockSector = ["AMZN","TSLA","HD","NKE","MCD","SBUX","LOW","BKNG","GM","TJX","F","CMG","EBAY","MAR","ROST","APTV","ORLY","YUM","LVS","HLT","DHI","LEN","ETSY","DPZ","CZR","MGM","ULTA","WHR","WYNN","PENN"]
+
+        if selection == "Consumer Defensive":
+            stockSector = ["WMT","PG","KO","PEP","COST","PM","TGT","EL","MDLZ","MO","CL","DG","KHC","KR","TSN","DLTR","MKC","K"]
+
+        if selection == "Energy":
+            stockSector = ["XOM","CVX","COP","EOG","KMI","SLB","PXD","MPC","PSX","WMB","VLO","OXY","HAL","FANG"]
+
+        if selection == "Financial":
+            stockSector = ["BRK.B","V","JPM","MA","PYPL","BAC","WFC","MS","C","AXP","BLK","GS","SCHW","SPGI","USB","PNC","CME","COF","MCO","AON","MET","AIG","SIVB","IVZ"]
+            
+        if selection == "Health Care":
+            stockSector = ["JNJ","UNH","PFE","LLY","ABT","ABBV","DHR","TMO","MRK","MDT","BMY","AMGN","MRNA","ISRG","CVS","SYK","ZTS","ANTM","GILD","REGN","HUM","VRTX","BIIB","A","WBA","DVA"]
+
+        if selection == "Industrials":
+            stockSector = ["UPS","HON","UNP","BA","RTX","MMM","CAT","GE","DE","LMT","ADP","FDX","CSX","ETN","WM","NOC","GPN","LUV","FAST","UAL","AAL"]
+
+        if selection == "Real Estate":
+            stockSector = ["AMT","PLD","CCI","EQIX","PSA","DLR","SPG","SBAC","WELL","EQR","AVB","ARE","CBRE","O","BXP","IRM"]
+            
+        if selection == "Technology":
+            stockSector = ["AAPL","MSFT","NVDA","ADBE","ORCL","INTC","CSCO","CRM","ACN","AVGO","QCOM","INTU","IBM","AMAT","NOW","AMD","MU","ANET","PAYC"]
+
+        if selection == "Utilities":
+            stockSector = ["NEE","DUK","SO","D","EXC","AEP","SRE","XEL","PEG","AWK","WEC"]
         
-    if selection == "Technology":
-        stockSector = ["AAPL","MSFT","NVDA","ADBE","ORCL","INTC","CSCO","CRM","ACN","AVGO","QCOM","INTU","IBM","AMAT","NOW","AMD","MU","ANET","PAYC"]
+        if selection == "Vanguard ETFs":
+            stockSector = ["VGT","VHT","VCR","VOX","VFH","VIS","VDC","VPU","VAW","VNQ","VDE"]
+        
+        if selection == "S&P500 Top 10":
+            stockSector = ['AAPL', 'MSFT', 'AMZN', 'FB', 'TSLA', 'GOOGL', 'GOOG', 'BRK.B', 'JNJ', 'JPM']
+        
+        if selection == "S&P500 Top 10-20":
+            stockSector = ['V', 'UNH', 'PG', 'NVDA', 'DIS', 'MA', 'HD', 'PYPL', 'BAC', 'VZ']
+        
+        if selection == "S&P500 Top 20-30":
+            stockSector = ['CMCSA', 'ADBE', 'NFLX', 'INTC', 'T', 'MRK', 'PFE', 'WMT', 'CRM', 'TMO']
 
-    if selection == "Utilities":
-        stockSector = ["NEE","DUK","SO","D","EXC","AEP","SRE","XEL","PEG","AWK","WEC"]
-    
-    if selection == "Vanguard ETFs":
-        stockSector = ["VGT","VHT","VCR","VOX","VFH","VIS","VDC","VPU","VAW","VNQ","VDE"]
-    
-    if selection == "S&P500 Top 10":
-        stockSector = ['AAPL', 'MSFT', 'AMZN', 'FB', 'TSLA', 'GOOGL', 'GOOG', 'BRK.B', 'JNJ', 'JPM']
-    
-    if selection == "S&P500 Top 10-20":
-        stockSector = ['V', 'UNH', 'PG', 'NVDA', 'DIS', 'MA', 'HD', 'PYPL', 'BAC', 'VZ']
-    
-    if selection == "S&P500 Top 20-30":
-        stockSector = ['CMCSA', 'ADBE', 'NFLX', 'INTC', 'T', 'MRK', 'PFE', 'WMT', 'CRM', 'TMO']
+        if selection == "S&P500 Top 30-40":
+            stockSector = ['ABT', 'PEP', 'KO', 'XOM', 'CSCO', 'ABBV', 'NKE', 'AVGO', 'QCOM', 'CVX']
+        
+        if selection == "S&P500 Top 40-50":
+            stockSector = ['ACN', 'COST', 'MDT', 'MCD', 'NEE', 'TXN', 'DHR', 'HON', 'UNP', 'LIN']
 
-    if selection == "S&P500 Top 30-40":
-        stockSector = ['ABT', 'PEP', 'KO', 'XOM', 'CSCO', 'ABBV', 'NKE', 'AVGO', 'QCOM', 'CVX']
+        if trend == "Price Trend by Day":
+            placeHolder = CMLVizHistoricalPriceDataByDay(stockSector)
+            switch = 0
+        elif trend == "Price Trend by Stocks": 
+            placeHolder = CMLVizHistoricalPriceDataByStock(stockSector)
+            switch = 1
     
-    if selection == "S&P500 Top 40-50":
-        stockSector = ['ACN', 'COST', 'MDT', 'MCD', 'NEE', 'TXN', 'DHR', 'HON', 'UNP', 'LIN']
+    else:
+        switch = 2
+        selection = singleStock
+        placeHolder = CMLVizHistoricalPriceDataByStock([singleStock])
 
-    if trend == "Price Trend by Day":
-        placeHolder = CMLVizHistoricalPriceDataByDay(stockSector)
-        switch = 0
-    elif trend == "Price Trend by Stocks": 
-        placeHolder = CMLVizHistoricalPriceDataByStock(stockSector)
-        switch = 1
     return render_template(
                         "stockTrendData.html",
                         data=placeHolder,
                         switch = switch,
-                        sector = selection
+                        sector=selection
                         )
 
 ###############################################

@@ -65,7 +65,7 @@
       {% extends "index.html" %}
       {% block content %}
       {{super()}}
-         {% if switch == 1 %}
+        {% if switch == 1 %}
           <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
           {% for x in range(data| length) %}
             <p>Price Movement for {{data[x].name}} </p>
@@ -78,6 +78,13 @@
           <p></p>
           {% for x in data %}
             <p>Day Price Movement for {{data[x].name}} </p>
+            <p>{{data[x].to_html() | safe }}</p>
+            <p></p>
+            <p></p>
+          {% endfor %}
+        {% elif switch == 2 %}
+          <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
+          {% for x in range(data| length) %}
             <p>{{data[x].to_html() | safe }}</p>
             <p></p>
             <p></p>

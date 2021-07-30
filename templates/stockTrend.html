@@ -9,29 +9,33 @@
       {% block content %}
       {{super()}}
       <h1>Select Stock Sector</h1>
-      <form action="/stockTrendData/" method = "POST">
+      <form action="/stockTrendData/" id="options" method = "POST">
          <select name="selection">
-            <option value="Basic Materials">Basic Materials</option>
-            <option value="Communication Services">Communication Services</option>
-            <option value="Consumer Cyclical">Consumer Cyclical</option>
-            <option value="Consumer Defensive">Consumer Defensive</option>
-            <option value="Energy">Energy</option>
-            <option value="Financial">Financial</option>
-            <option value="Health Care">Health Care</option>
-            <option value="Industrials">Industrials</option>
-            <option value="Real Estate">Real Estate</option>
-            <option value="Technology">Technology</option>
-            <option value="Utilities">Utilities</option>
-            <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
-            <option value="Vanguard ETFs">Vanguard ETFs</option>
-            <option value="S&P500 Top 10">S&P500 Top 10</option>
-            <option value="S&P500 Top 10-20">S&P500 Top 10-20</option>
-            <option value="S&P500 Top 20-30">S&P500 Top 20-30</option>
-            <option value="S&P500 Top 30-40">S&P500 Top 30-40</option>
-            <option value="S&P500 Top 40-50">S&P500 Top 40-50</option>
+               <option value="Basic Materials">Basic Materials</option>
+               <option value="Communication Services">Communication Services</option>
+               <option value="Consumer Cyclical">Consumer Cyclical</option>
+               <option value="Consumer Defensive">Consumer Defensive</option>
+               <option value="Energy">Energy</option>
+               <option value="Financial">Financial</option>
+               <option value="Health Care">Health Care</option>
+               <option value="Industrials">Industrials</option>
+               <option value="Real Estate">Real Estate</option>
+               <option value="Technology">Technology</option>
+               <option value="Utilities">Utilities</option>
+               <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+               <option value="Vanguard ETFs">Vanguard ETFs</option>
+               <option value="S&P500 Top 10">S&P500 Top 10</option>
+               <option value="S&P500 Top 10-20">S&P500 Top 10-20</option>
+               <option value="S&P500 Top 20-30">S&P500 Top 20-30</option>
+               <option value="S&P500 Top 30-40">S&P500 Top 30-40</option>
+               <option value="S&P500 Top 40-50">S&P500 Top 40-50</option>
          </select>
          <p><input type = "submit" name= "trend" value = "Price Trend by Day"></p>
          <p><input type = "submit" name= "trend" value = "Price Trend by Stocks"></p>
+         <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+         <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+         <p>Enter single Stock <input type = "text" name = "symbol" placeholder="Enter stock symbol"></p>
+         <p><input type = "submit" name = "onestock" value = "Single Stock Trend" ></p>
       </form>
       {% endblock %}
    </body>
