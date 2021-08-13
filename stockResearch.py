@@ -1478,7 +1478,8 @@ def marketCap():
     marketCapStocks = CMLVizTopMarketCapStocks() 
     marketCapStocks = marketCapStocks.reset_index()
     marketCapStocks.index.names = ["Index"]
-    marketCapStocks.columns = ["Stock", "Last Price","Net Change", "Price Change"]
+    marketCapStocks.columns = ["Stock", "Last Price","Price Change", "Net Change"]
+    marketCapStocks = marketCapStocks.sort_values(by="Net Change",ascending=False)
     partitions = 25
     marketCapStocksArray = np.array_split(marketCapStocks, partitions)
 
