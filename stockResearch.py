@@ -1119,7 +1119,26 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
         df = pd.DataFrame(dataPriceMap,columns=["Date","Price"]).set_index(pd.DataFrame(dataPriceMap,columns=["Date","Price"]).columns[0])
         stockData[ticker] = []
 
-        print ("Working on Ticker: " + ticker)
+        priceData = {}
+        if "." in ticker:
+            url = "https://finviz.com/quote.ashx?t=" + ticker.replace(".","-")
+        else:
+            url = "https://finviz.com/quote.ashx?t=" + ticker
+        r = requests.get(url,headers = {"User-Agent":"Mozilla"})
+        if r.status_code == 200:
+            a = pd.read_html(r.text)
+            stock = a[5].to_dict()
+            priceData["currentPrice"] = stock[11][10]
+            priceData["dailyPercentChange"] = stock[11][11]
+            priceRange = stock[9][5]
+            priceData["52WLow"] = priceRange.split("-")[0]
+            priceData["52WLowPercentChange"] = stock[9][7]
+            priceData["52WHigh"] = priceRange.split("-")[1]
+            priceData["52WHighPercentChange"] = stock[9][6]
+
+        print ("Working on Ticker: " + ticker)    
+        # print (priceData)
+        
         # Storing Present Day : Date, Price, Day from past, Percent Change
         pastDays = [1,3,5,7,10,14,21,30]
         todayDateTimeObj = datetime.strptime(df.iloc[0].name, '%Y-%m-%d')
@@ -1127,7 +1146,7 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
         todayPrice = df.loc[todayDate]["Price"]
         # print ("Today Date is " + str(todayDate))
         # print ("Today Price is " + str(todayPrice))
-        stockData[ticker].append((todayDate,todayPrice,0,0))
+        stockData[ticker].append((todayDate,todayPrice,0,0,str(priceData["52WLowPercentChange"]) + " ($" + str(priceData["52WLow"]) + ")",str(priceData["52WHighPercentChange"]) + " ($" + str(priceData["52WHigh"]) + ")"))
 
         #Looping in the Past
         #Finding price data for day in the past
@@ -1141,9 +1160,9 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
                 pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
             pastPrice = df.loc[pastDay]["Price"]
             percentChange = 100*(float(todayPrice) - float(pastPrice))/float(pastPrice)
-            stockData[ticker].append((pastDay,pastPrice,day,percentChange))
+            stockData[ticker].append((pastDay,pastPrice,day,percentChange,"",""))
 
-        stockData[ticker] = pd.DataFrame(stockData[ticker],columns=["Date","Past Price", "Past Days", "Percent Change"])
+        stockData[ticker] = pd.DataFrame(stockData[ticker],columns=["Date","Past Price", "Past Days", "Percent Change","52WLowPercentChange","52WHighPercentChange"])
         stockData[ticker] = stockData[ticker].set_index(stockData[ticker].columns[0])
         stockData[ticker] = stockData[ticker].rename_axis(ticker)
         stockData[ticker].name = ticker
