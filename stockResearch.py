@@ -516,7 +516,7 @@ def etfDBHoldings(ticker):
     topHoldingsbyWeight = {}
     url = "https://etfdb.com/etf/" + ticker.upper() + "/#holdings"
     a = pd.read_html(url)
-    t = a[2].set_index(a[2].columns[0])["% Assets"]
+    t = a[3].set_index(a[3].columns[0])["% Assets"]
     for x in t.index:
         if isinstance(x,str):
             if "%" in t[x]:
