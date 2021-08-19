@@ -16,7 +16,7 @@ import requests,datetime,re,time
 import numpy as np
 from bs4 import BeautifulSoup as soup
 from urllib.request import Request, urlopen
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -366,7 +366,7 @@ def stocksfiftyTwoWeekHighLowChange(ticker):
         fiftyTwoWeekHighLowChange.append("52 Day High (Intraday) is: " + str(ticker.data["fiftyTwoWeekHigh"]) + ". Percent Change from 52W High is: " + str(round(100*(ticker.data["fiftyTwoWeekHigh"]-ticker.close)/ticker.data["fiftyTwoWeekHigh"],2)) + "%")
         fiftyTwoWeekHighLowChange.append("52 Day Low (Intraday) is: " + str(ticker.data["fiftyTwoWeekLow"]) + ". Percent Change from 52W Low is: " + str(round(-100*(ticker.data["fiftyTwoWeekLow"]-ticker.close)/ticker.data["fiftyTwoWeekLow"],2))+ "%")
         columnNames = list(ticker.stock["Close"].isin([ticker.max])[ticker.stock["Close"].isin([ticker.max]) == True].index)[0].date()
-        fiftyTwoWeekHighLowChange.append(ticker.symbol + " is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-datetime.date.today()).days) + " days ago on " + str(columnNames))
+        fiftyTwoWeekHighLowChange.append(ticker.symbol + " is currently " + str(round(100* (ticker.max-ticker.close)/ticker.max,2)) + "% below All Time High. All time high (closingPrice) ($" + str(round(ticker.max,2)) + ") was " + str((columnNames-date.today()).days) + " days ago on " + str(columnNames))
 
     return fiftyTwoWeekHighLowChange
 
