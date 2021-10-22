@@ -128,8 +128,11 @@ tr:nth-child(even) {
 
 
   <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
+  <h1>Holdings That Matter for {{ticker}}</h1>
+  {{topHoldings.to_html() | safe}}
+  <hr style="border: 3px dotted #0099CC" color="#000000" size="4">
 
-  <div class="row">
+  <!-- <div class="row">
     {% for x in etfHoldings %}
       <div style="padding: 25px" class="column">
         <h1 style="text-align:left">ETF Holdings for {{x}}</h1>
@@ -147,7 +150,7 @@ tr:nth-child(even) {
         </table>
       </div>
     {%endfor%}
-  </div>
+  </div> -->
   {% endblock %}
 </body>
 </html>

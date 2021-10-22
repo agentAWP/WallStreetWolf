@@ -1238,6 +1238,81 @@ def CMLVizHistoricalPriceDataByDay(stockSector):
 
     return dayPriceMovement
 
+#All S&P500 Stocks from FinViz
+#FinViz S&P500 Stocks sorted by GROUPED by "SECTOR"
+# sectorSPY = pd.DataFrame.from_dict(finVizSuperScreener(), orient='index').groupby(by=["Sector"])
+# stockDictBySector = {}
+# for sector in sectorSPY:
+#     stockDictBySector[sector[0]] = sectorSPY.get_group(sector[0]).sort_values(by=["Change"],ascending=False)
+def finVizSuperScreenerNotUsed():
+    stockDict = {}
+    sp500URL = "https://finviz.com/screener.ashx?v=111&f=idx_sp500&ft=4"
+    req = Request(sp500URL, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    html = soup(webpage, "html.parser")
+    screenResults = pd.read_html(str(html))
+    totalPages = int(screenResults[5].loc[4][0].split("...")[-1].split("next")[0])
+    pageIndex = 0
+    firstPageResults = screenResults[8]
+    firstPageResults = firstPageResults.drop(columns=[0,4,5,10])
+    firstPageResults = firstPageResults.set_index(firstPageResults.columns[0])
+    firstPageResults = firstPageResults.rename(columns={2:"Company",3:"Sector",6:"Market Cap",7:"P/E",8:"Price",9:"Change"})
+    firstPageResults = firstPageResults.rename_axis("Ticker")
+    firstPageResults = firstPageResults.iloc[1:,:]
+    for i in firstPageResults.index:
+        stockDict[i] = firstPageResults.loc[i]
+    for page in range(1,totalPages+1):
+        pageIndex = 2+pageIndex
+        url = sp500URL + "&r=" + str(pageIndex) + "1" 
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        html = soup(webpage, "html.parser")
+        screenResults = pd.read_html(str(html))[8]
+        screenResults = screenResults.drop(columns=[0,4,5,10])
+        screenResults = screenResults.set_index(screenResults.columns[0])
+        screenResults = screenResults.rename(columns={2:"Company",3:"Sector",6:"Market Cap",7:"P/E",8:"Price",9:"Change"})
+        screenResults = screenResults.rename_axis("Ticker")
+        screenResults = screenResults.iloc[1:,:]
+        for i in screenResults.index:
+            stockDict[i] = screenResults.loc[i]
+    return stockDict
+
+def finVizSuperScreener(selection):
+    stockDict = {}
+    finVizURL = "https://finviz.com/screener.ashx?v=111&f=geo_usa,idx_sp500,sec_"+ selection
+    # finVizURL = "https://finviz.com/screener.ashx?v=111&f=geo_usa,idx_sp500"
+    print ("FinViz URL: " + finVizURL)
+    req = Request(finVizURL, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    html = soup(webpage, "html.parser")
+    screenResults = pd.read_html(str(html))
+    pages =  screenResults[5].loc[4][0].split("next")[0].split()[0]
+    totalPages = [int(a) for a in str(pages)][-1]
+    print ("Total Pages: " + str(totalPages) + "\n")
+    pageIndex = 0
+    firstPageResults = screenResults[8]
+    firstPageResults = firstPageResults.drop(columns=[0,4,5,10])
+    firstPageResults = firstPageResults.set_index(firstPageResults.columns[0])
+    firstPageResults = firstPageResults.rename(columns={2:"Company",3:"Sector",6:"Market Cap",7:"P/E",8:"Price",9:"Change"})
+    firstPageResults = firstPageResults.rename_axis("Ticker")
+    firstPageResults = firstPageResults.iloc[1:,:]
+    for i in firstPageResults.index:
+        stockDict[i] = firstPageResults.loc[i]
+    for page in range(1,totalPages+1):
+        pageIndex = 2+pageIndex
+        url = finVizURL + "&r=" + str(pageIndex) + "1" 
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        html = soup(webpage, "html.parser")
+        screenResults = pd.read_html(str(html))[8]
+        screenResults = screenResults.drop(columns=[0,4,5,10])
+        screenResults = screenResults.set_index(screenResults.columns[0])
+        screenResults = screenResults.rename(columns={2:"Company",3:"Sector",6:"Market Cap",7:"P/E",8:"Price",9:"Change"})
+        screenResults = screenResults.rename_axis("Ticker")
+        screenResults = screenResults.iloc[1:,:]
+        for i in screenResults.index:
+            stockDict[i] = screenResults.loc[i]
+    return stockDict
 
 # print ("------------------------------------------------------------------------------------")
 
@@ -1384,20 +1459,27 @@ def etfResult():
 
         
     # Find all Holdings and thier Weight in the portfolio
-    for x in values:
-        r = requests.get("https://financialmodelingprep.com/api/v3/etf-holder/" + x + "?apikey=308ce961a124eb43de86045c7340dac1",headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"})
-        if r.json():
-            for m in r.json():
-                if m["weightPercentage"] != None:
-                    if m["asset"] != None:
-                        etfTickers[m["asset"].replace(".","-")] = m["weightPercentage"]
-            etfHoldings[x] = dict((sorted(etfTickers.items(), key=lambda item: item[1],reverse=True)))
-            etfTickers = {}
-        else:
-            etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
+    # Could not use it because FinancialModelingPrep required Premium subscription
+    # for x in values:
+    #     r = requests.get("https://financialmodelingprep.com/api/v3/etf-holder/" + x + "?apikey=308ce961a124eb43de86045c7340dac1",headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"})
+    #     if r.json():
+    #         for m in r.json():
+    #             if m["weightPercentage"] != None:
+    #                 if m["asset"] != None:
+    #                     etfTickers[m["asset"].replace(".","-")] = m["weightPercentage"]
+    #         etfHoldings[x] = dict((sorted(etfTickers.items(), key=lambda item: item[1],reverse=True)))
+    #         etfTickers = {}
+    #     else:
+            # etfHoldings[x] = {"No Stock information available": "Could not find weight data"}
 
+    # Find Top Holdings, Portfolio Weight, Shares Held, Market Value
+    # Data from Schwab.com
+    etfURL = "https://www.schwab.wallst.com/schwab/Prospect/research/etfs/schwabETF/index.asp?YYY101_z5K6INmijHlQdLB08YbROFLxGYhieqaBF7tf83RwNao2Hx4UmMoMuMjb7xBiyi/AGZ0+dPcMFF8Saj5oUZbOmLzXPl9hroAXGx8UBpxRPkg=&type=holdings&symbol=" + values[0]
+    schwabData = pd.read_html(etfURL)
+    topHoldings = schwabData[1]
+    topHoldings = topHoldings.set_index(topHoldings.columns[0])
 
-    return render_template("etfResult.html",etfTASignals=etfTASignals,etfTA=etfTA,etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs)
+    return render_template("etfResult.html",etfTASignals=etfTASignals,etfTA=etfTA,etfSMA=etfSMA,etfTopTenHoldings=etfTopTenHoldings,stockData=stockData,etfHoldings=etfHoldings,allETFs=allETFs,topHoldings=topHoldings)
 
 
 ###############################################
@@ -1524,7 +1606,9 @@ def stockTrend():
 def stockTrendData():
 
     singleStock = request.form.get("symbol")
-    print ("This is the value of the selection" + str(singleStock))
+    sectorStocks = ""
+
+    
 
     if singleStock  == "":
     
@@ -1532,38 +1616,57 @@ def stockTrendData():
         
         trend = request.form.get("trend")
 
-        if selection == "Basic Materials":
+        if selection not in ["Vanguard ETFs","S&P500 Top 10","S&P500 Top 10-20","S&P500 Top 20-30","S&P500 Top 30-40","S&P500 Top 40-50"]:
+            print (selection)
+            #Sector specific S&P500 Stocks in FinViz grouped by "SECTOR"
+            sectorSPY = pd.DataFrame.from_dict(finVizSuperScreener(selection.replace(" ","").lower()), orient='index').groupby(by=["Sector"])
+            stockDictBySector = {}
+            for sector in sectorSPY:
+                stockDictBySector[sector[0]] = sectorSPY.get_group(sector[0]).sort_values(by=["Change"],ascending=False)
+            sectorStocks = stockDictBySector[selection]
+
+        if  selection == "Basic Materials":
             stockSector = ["LIN","SHW","APD","ECL","FCX","NEM","DOW","DD","PPG","IFF"]
 
         if selection == "Communication Services":
             stockSector = ["GOOG","FB","DIS","CMCSA","VZ","NFLX","T","TMUS","CHTR","ATVI","TWTR","EA","VIAC","DISH","FOXA","FOX","TTWO","LYV"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Consumer Cyclical":
             stockSector = ["AMZN","TSLA","HD","NKE","MCD","SBUX","LOW","BKNG","GM","TJX","F","CMG","EBAY","MAR","ROST","APTV","ORLY","YUM","LVS","HLT","DHI","LEN","ETSY","DPZ","CZR","MGM","ULTA","WHR","WYNN","PENN"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Consumer Defensive":
             stockSector = ["WMT","PG","KO","PEP","COST","PM","TGT","EL","MDLZ","MO","CL","DG","KHC","KR","TSN","DLTR","MKC","K"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Energy":
             stockSector = ["XOM","CVX","COP","EOG","KMI","SLB","PXD","MPC","PSX","WMB","VLO","OXY","HAL","FANG"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Financial":
             stockSector = ["BRK.B","V","JPM","MA","PYPL","BAC","WFC","MS","C","AXP","BLK","GS","SCHW","SPGI","USB","PNC","CME","COF","MCO","AON","MET","AIG","SIVB","IVZ"]
+            sectorStocks = stockDictBySector[selection]
             
         if selection == "Health Care":
             stockSector = ["JNJ","UNH","PFE","LLY","ABT","ABBV","DHR","TMO","MRK","MDT","BMY","AMGN","MRNA","ISRG","CVS","SYK","ZTS","ANTM","GILD","REGN","HUM","VRTX","BIIB","A","WBA","DVA"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Industrials":
             stockSector = ["UPS","HON","UNP","BA","RTX","MMM","CAT","GE","DE","LMT","ADP","FDX","CSX","ETN","WM","NOC","GPN","LUV","FAST","UAL","AAL"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Real Estate":
             stockSector = ["AMT","PLD","CCI","EQIX","PSA","DLR","SPG","SBAC","WELL","EQR","AVB","ARE","CBRE","O","BXP","IRM"]
+            sectorStocks = stockDictBySector[selection]
             
         if selection == "Technology":
             stockSector = ["AAPL","MSFT","NVDA","ADBE","ORCL","INTC","CSCO","CRM","ACN","AVGO","QCOM","INTU","IBM","AMAT","NOW","AMD","MU","ANET","PAYC"]
+            sectorStocks = stockDictBySector[selection]
 
         if selection == "Utilities":
             stockSector = ["NEE","DUK","SO","D","EXC","AEP","SRE","XEL","PEG","AWK","WEC"]
+            sectorStocks = stockDictBySector[selection]
         
         if selection == "Vanguard ETFs":
             stockSector = ["VGT","VHT","VCR","VOX","VFH","VIS","VDC","VPU","VAW","VNQ","VDE"]
@@ -1599,7 +1702,8 @@ def stockTrendData():
                         "stockTrendData.html",
                         data=placeHolder,
                         switch = switch,
-                        sector=selection
+                        sector=selection,
+                        sectorStocks=sectorStocks
                         )
 
 ###############################################

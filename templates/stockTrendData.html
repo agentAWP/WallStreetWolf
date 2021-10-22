@@ -73,6 +73,14 @@
             <p></p>
             <p></p>
           {% endfor %}
+          {% if sectorStocks|length %}
+            <h1 style="text-align:left">DAY Price Change for all {{sector}} stocks in S&P500</h1>
+            {{sectorStocks.to_html() | safe}}
+          {% else %}
+            <p></p>
+          {% endif %}
+          <p></p>
+          <p></p>
         {% elif switch == 0 %}
           <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
           <p></p>
@@ -82,6 +90,14 @@
             <p></p>
             <p></p>
           {% endfor %}
+          {% if sectorStocks|length %}
+            <h1 style="text-align:left">DAY Price Change for all {{sector}} stocks in S&P500</h1>
+            {{sectorStocks.to_html() | safe}}
+          {% else %}
+            <p></p>
+          {% endif %}
+          <p></p>
+          <p></p>
         {% elif switch == 2 %}
           <h1 style="text-align:left">Price Movement/Trend of stocks in {{sector}}</h1>
           {% for x in range(data| length) %}
