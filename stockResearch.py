@@ -663,7 +663,7 @@ def stockanalysisFundamentals(ticker):
     tickerURL = "https://stockanalysis.com/stocks/"+ ticker + "/financials/"
     r = requests.get(tickerURL,headers = {"User-Agent":"Mozilla"})
     a = pd.read_html(r.text)
-    a[0] = a[0].drop(["Unnamed: 1"], axis = 1)
+    # a[0] = a[0].drop(["Unnamed: 1"], axis = 1)
     a[0] = a[0].set_index(a[0].columns[0])
     incomeStatement = a[0]
 
@@ -671,7 +671,7 @@ def stockanalysisFundamentals(ticker):
     tickerURL = "https://stockanalysis.com/stocks/"+ ticker + "/financials/balance-sheet/"
     r = requests.get(tickerURL,headers={"User-Agent":"Mozilla"})
     b = pd.read_html(r.text)
-    b[0] = b[0].drop(["Unnamed: 1"], axis = 1)
+    # b[0] = b[0].drop(["Unnamed: 1"], axis = 1)
     b[0] = b[0].set_index(b[0].columns[0])
     balanceSheet = b[0]
 
@@ -679,7 +679,7 @@ def stockanalysisFundamentals(ticker):
     tickerURL = "https://stockanalysis.com/stocks/"+ ticker + "/financials/cash-flow-statement/"
     r = requests.get(tickerURL,headers={"User-Agent":"Mozilla"})
     c = pd.read_html(r.text)
-    c[0] = c[0].drop(["Unnamed: 1"], axis = 1)
+    # c[0] = c[0].drop(["Unnamed: 1"], axis = 1)
     c[0] = c[0].set_index(c[0].columns[0])
     cashFlowStatement = c[0]
 
@@ -688,7 +688,7 @@ def stockanalysisFundamentals(ticker):
     tickerURL = "https://stockanalysis.com/stocks/"+ ticker + "/financials/ratios/"
     r = requests.get(tickerURL,headers={"User-Agent":"Mozilla"})
     d = pd.read_html(r.text)
-    d[0] = d[0].drop(["Unnamed: 1"], axis = 1)
+    # d[0] = d[0].drop(["Unnamed: 1"], axis = 1)
     d[0] = d[0].set_index(d[0].columns[0])
     companyRatios = d[0]
     return {"incomeStatement":incomeStatement,"balanceSheet":balanceSheet,"cashFlowStatement":cashFlowStatement,"companyRatios":companyRatios}
