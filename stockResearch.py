@@ -1326,7 +1326,7 @@ topbar = Navbar(
                 View('Fundamental', 'fundamentals'),
                 View('ETFs', 'etf'),
                 View('Markets', 'markets'),
-                View('S&P500 Sector Holdings', 'sectorTopTenHoldings'),
+                View('S&P500 Sector Holdings (Slow!)', 'sectorTopTenHoldings'),
                 View('Company Financials', 'companyFinancialsComparison'),
                 View('FinViz Stock Screener', 'finVizStockScreen'),
                 View('CryptoCurrencies',"cryptoHoldings"),
