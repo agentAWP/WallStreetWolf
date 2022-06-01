@@ -20,6 +20,9 @@ from datetime import datetime, timedelta,date
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+#BEAUTIFUL SOUP url
+#https://www.dataquest.io/blog/web-scraping-python-using-beautiful-soup/
+
 # pd.set_option('display.max_colwidth', 20)
 
 ###############################################
@@ -513,15 +516,37 @@ def lazyFAmarketState():
     return {"topGainers":topGainers,"topLosers":topLosers,"highestVolume":highestVolume,"sectorPerformance":sectorPerformance}
 
 def etfDBHoldings(ticker):
+
+    ##################################
+    # 	VGT
+    # AAPL 	22.60%
+    # MSFT 	18.09%
+    # NVDA 	4.24%
+    # V 	3.09%
+    # MA 	2.94%
+    # AVGO 	2.09%
+    # CSCO 	1.90%
+    # ACN 	1.75%
+    # ADBE 	1.73%
+    # INTC 	1.63%
+    # CRM 	1.58%
+    # QCOM 	1.45%
+    # TXN 	1.44%
+    # AMD 	1.29%
+    # ORCL 	1.13%
+    ##################################
+
     topHoldingsbyWeight = {}
     url = "https://etfdb.com/etf/" + ticker.upper() + "/#holdings"
+    print (url)
+    print ("--" * 50)
     a = pd.read_html(url)
-    t = a[3].set_index(a[3].columns[0])["% Assets"]
-    for x in t.index:
-        if isinstance(x,str):
-            if "%" in t[x]:
-                topHoldingsbyWeight[x.replace(".","-")]=t[x]
-    # print (topHoldingsbyWeight)
+    j = a[4][:-1]
+    for x in j.index:
+        print (j.loc[x]["Symbol"] + " : " + j.loc[x]["% Assets"])
+        topHoldingsbyWeight[j.loc[x]["Symbol"]] = j.loc[x]["% Assets"]
+     Sector: Information Technology
+
     return topHoldingsbyWeight
 
 def finVizMarketScreener():
@@ -779,7 +804,7 @@ def techAnalysis(ticker):
     url = "http://www.stockta.com/cgi-bin/analysis.pl?symb=" + ticker  +"&cobrand=&mode=stock"
     a = pd.read_html(url)
     dailyData = a[5]
-    dailyData = dailyData.set_index(dailyData.columns[0]) 
+    dailyData = dailyData.set_index(dailyData.columns[0])
     dailyData = dailyData.drop(labels="Symbol",axis=0)
     dailyData = dailyData.rename(columns={1:"Last Trade",2:"Date",3:"Percent Change",4:"Open",5:"High",6:"Low",7:"Volume"})
     dailyData.index.names = ["Daily Data"]
@@ -923,7 +948,7 @@ def cryptoData():
     cryptoTickers = {}
     for x in cryptoMarket:
         if x["symbol"] in [
-            "btc", 
+            "btc",
             "eth",
             "bnb",
             "usdt",
@@ -1042,7 +1067,7 @@ def CMLVizTopMarketCapStocks():
                                                     "netChange": "$" + str(company["netChange"]),
                                                     "percentChange": str(company["percentChange"]) + "%"
                                                 }
-    return pd.DataFrame.from_dict({(i): marketCapStocks[i] 
+    return pd.DataFrame.from_dict({(i): marketCapStocks[i]
                            for i in marketCapStocks.keys()},
                        orient='index')
 def CMLVizAllStockNews():
@@ -1071,7 +1096,7 @@ def CMLVizAllStockNews():
             for stock in news:
                 if news[stock] != "":
                     allStockNews[stock] = news[stock]
-    
+
     # Finding Price Movements for Stocks in the News
     for ticker in allStockNews:
         url = "https://www.cmlviz.com/get_live_quotes.php?tickers=" + ticker
@@ -1136,9 +1161,9 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
             priceData["52WHigh"] = priceRange.split("-")[1]
             priceData["52WHighPercentChange"] = stock[9][6]
 
-        print ("Working on Ticker: " + ticker)    
+        print ("Working on Ticker: " + ticker)
         # print (priceData)
-        
+
         # Storing Present Day : Date, Price, Day from past, Percent Change
         pastDays = [1,3,5,7,10,14,21,30]
         todayDateTimeObj = datetime.strptime(df.iloc[0].name, '%Y-%m-%d')
@@ -1154,7 +1179,7 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
         for day in pastDays:
             pastDayTimeObj = todayDateTimeObj-timedelta(days=day)
             pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
-            
+
             while pastDay not in df.index:
                 pastDayTimeObj = pastDayTimeObj-timedelta(days=1)
                 pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
@@ -1168,7 +1193,7 @@ def CMLVizHistoricalPriceDataByStock(stockSector):
         stockData[ticker].name = ticker
         indexGSPCData.append(stockData[ticker])
 
-    
+
     return indexGSPCData
 
 def CMLVizHistoricalPriceDataByDay(stockSector):
@@ -1216,7 +1241,7 @@ def CMLVizHistoricalPriceDataByDay(stockSector):
         for day in pastDays:
             pastDayTimeObj = todayDateTimeObj-timedelta(days=day)
             pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
-            
+
             while pastDay not in df.index:
                 pastDayTimeObj = pastDayTimeObj-timedelta(days=1)
                 pastDay = datetime.strftime(pastDayTimeObj.date(),'%Y-%m-%d')
@@ -1263,7 +1288,7 @@ def finVizSuperScreenerNotUsed():
         stockDict[i] = firstPageResults.loc[i]
     for page in range(1,totalPages+1):
         pageIndex = 2+pageIndex
-        url = sp500URL + "&r=" + str(pageIndex) + "1" 
+        url = sp500URL + "&r=" + str(pageIndex) + "1"
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         webpage = urlopen(req).read()
         html = soup(webpage, "html.parser")
@@ -1300,7 +1325,7 @@ def finVizSuperScreener(selection):
         stockDict[i] = firstPageResults.loc[i]
     for page in range(1,totalPages+1):
         pageIndex = 2+pageIndex
-        url = finVizURL + "&r=" + str(pageIndex) + "1" 
+        url = finVizURL + "&r=" + str(pageIndex) + "1"
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         webpage = urlopen(req).read()
         html = soup(webpage, "html.parser")
@@ -1446,7 +1471,7 @@ def etfResult():
         topTenHoldings = list(etfHoldings2[x].keys())[:10]
         stockData = priceMovementFinViz(topTenHoldings)
         etfTopTenHoldings[x] = stockData
-        
+
 
     #ETF SMA movement
     etfSMA = etfSMAMovement(values)
@@ -1457,7 +1482,7 @@ def etfResult():
         etfTA[x] = techAnalysis(x)
         etfTASignals[x] = techSignals(x)
 
-        
+
     # Find all Holdings and thier Weight in the portfolio
     # Could not use it because FinancialModelingPrep required Premium subscription
     # for x in values:
@@ -1510,6 +1535,7 @@ def sectorTopTenHoldings():
 
     for x in range(0,len(sectorList)):
         allSectorsHoldingsByWeights[sectorList[x]] = pd.DataFrame.from_dict(etfDBHoldings(sectorHoldings[x]),orient="index",columns=[sectorHoldings[x]])
+    # print (allSectorsHoldingsByWeights)
     return render_template("sectorTopTenHoldings.html",allSectorsHoldingsByWeights=allSectorsHoldingsByWeights)
 
 ###############################################
@@ -1576,7 +1602,7 @@ def stockNews():
 
 @app.route("/marketCap/",methods = ["GET"])
 def marketCap():
-    marketCapStocks = CMLVizTopMarketCapStocks() 
+    marketCapStocks = CMLVizTopMarketCapStocks()
     marketCapStocks = marketCapStocks.reset_index()
     marketCapStocks.index.names = ["Index"]
     marketCapStocks.columns = ["Stock", "Last Price","Price Change", "Net Change"]
@@ -1608,12 +1634,12 @@ def stockTrendData():
     singleStock = request.form.get("symbol")
     sectorStocks = ""
 
-    
+
 
     if singleStock  == "":
-    
+
         selection = request.form.get('selection')
-        
+
         trend = request.form.get("trend")
 
         if selection not in ["Vanguard ETFs","S&P500 Top 10","S&P500 Top 10-20","S&P500 Top 20-30","S&P500 Top 30-40","S&P500 Top 40-50"]:
@@ -1647,7 +1673,7 @@ def stockTrendData():
         if selection == "Financial":
             stockSector = ["BRK.B","V","JPM","MA","PYPL","BAC","WFC","MS","C","AXP","BLK","GS","SCHW","SPGI","USB","PNC","CME","COF","MCO","AON","MET","AIG","SIVB","IVZ"]
             sectorStocks = stockDictBySector[selection]
-            
+
         if selection == "Health Care":
             stockSector = ["JNJ","UNH","PFE","LLY","ABT","ABBV","DHR","TMO","MRK","MDT","BMY","AMGN","MRNA","ISRG","CVS","SYK","ZTS","ANTM","GILD","REGN","HUM","VRTX","BIIB","A","WBA","DVA"]
             sectorStocks = stockDictBySector[selection]
@@ -1659,7 +1685,7 @@ def stockTrendData():
         if selection == "Real Estate":
             stockSector = ["AMT","PLD","CCI","EQIX","PSA","DLR","SPG","SBAC","WELL","EQR","AVB","ARE","CBRE","O","BXP","IRM"]
             sectorStocks = stockDictBySector[selection]
-            
+
         if selection == "Technology":
             stockSector = ["AAPL","MSFT","NVDA","ADBE","ORCL","INTC","CSCO","CRM","ACN","AVGO","QCOM","INTU","IBM","AMAT","NOW","AMD","MU","ANET","PAYC"]
             sectorStocks = stockDictBySector[selection]
@@ -1667,32 +1693,32 @@ def stockTrendData():
         if selection == "Utilities":
             stockSector = ["NEE","DUK","SO","D","EXC","AEP","SRE","XEL","PEG","AWK","WEC"]
             sectorStocks = stockDictBySector[selection]
-        
+
         if selection == "Vanguard ETFs":
             stockSector = ["VGT","VHT","VCR","VOX","VFH","VIS","VDC","VPU","VAW","VNQ","VDE"]
-        
+
         if selection == "S&P500 Top 10":
             stockSector = ['AAPL', 'MSFT', 'AMZN', 'FB', 'TSLA', 'GOOGL', 'GOOG', 'BRK.B', 'JNJ', 'JPM']
-        
+
         if selection == "S&P500 Top 10-20":
             stockSector = ['V', 'UNH', 'PG', 'NVDA', 'DIS', 'MA', 'HD', 'PYPL', 'BAC', 'VZ']
-        
+
         if selection == "S&P500 Top 20-30":
             stockSector = ['CMCSA', 'ADBE', 'NFLX', 'INTC', 'T', 'MRK', 'PFE', 'WMT', 'CRM', 'TMO']
 
         if selection == "S&P500 Top 30-40":
             stockSector = ['ABT', 'PEP', 'KO', 'XOM', 'CSCO', 'ABBV', 'NKE', 'AVGO', 'QCOM', 'CVX']
-        
+
         if selection == "S&P500 Top 40-50":
             stockSector = ['ACN', 'COST', 'MDT', 'MCD', 'NEE', 'TXN', 'DHR', 'HON', 'UNP', 'LIN']
 
         if trend == "Price Trend by Day":
             placeHolder = CMLVizHistoricalPriceDataByDay(stockSector)
             switch = 0
-        elif trend == "Price Trend by Stocks": 
+        elif trend == "Price Trend by Stocks":
             placeHolder = CMLVizHistoricalPriceDataByStock(stockSector)
             switch = 1
-    
+
     else:
         switch = 2
         selection = singleStock
